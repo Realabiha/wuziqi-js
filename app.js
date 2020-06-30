@@ -20,6 +20,6 @@ app.use('/*', (req, res) => {
     res.send('NOT FOUND');
 })
 
-app.listen(8686, _ => {
+app.listen(process.env.PORT || 8686, _ => {
     console.log('server is running!')
 })
