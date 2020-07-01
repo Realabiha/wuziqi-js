@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const hbs = require('hbs');
+const port = process.env.PORT || 8686;
 
 // 设置模板引擎
 app.set('view engine', 'html');
@@ -13,13 +14,15 @@ app.use(express.static('public'));
 
 
 app.use('/', (req, res, next) => {
-    res.render('index');
+    res.render('index', {title: '五子棋'});
 })
 
 app.use('/*', (req, res) => {
     res.send('NOT FOUND');
 })
 
-app.listen(process.env.PORT || 8686, _ => {
-    console.log('server is running!')
+
+
+app.listen(port, _ => {
+    console.log(`server is running at port ${port}!`)
 })
