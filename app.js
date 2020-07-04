@@ -10,16 +10,14 @@ app.engine('html', hbs.__express);
 // 设置文件路径
 app.set('views', __dirname);
 // 设置静态资源路径
-app.use(express.static('public'));
 
+app.use(express.static('static'));
 
-app.use('/', (req, res, next) => {
+app.use('/', (req, res) => {
     res.render('index', {title: '五子棋'});
+
 })
 
-app.use('/*', (req, res) => {
-    res.send('NOT FOUND');
-})
 
 
 
