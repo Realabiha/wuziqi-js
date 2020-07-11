@@ -1,7 +1,13 @@
 const GRIDROW = 16, GRIDCOLUMN = 16;
 const chess = document.querySelector('.chess');
 const input = document.querySelector('input');
-let grids = [], count = 1, result = 0, calc = [], AI = false;
+let grids = [], // 棋盘栅格 
+    count = 1, // 回合计数
+    result = false, // 回合结束标记 
+    calc = [], // ai计算
+    black = [],
+    white = [],
+    AI = false; // AI开关
 
 
 input.onchange = handleChange;
@@ -31,7 +37,10 @@ function createGrid(x, y){
 
 function handleClick(){
     calc = [];
+    // 2 = 黑棋 |  1 = 白棋  
     const flag = count % 2 + 1;
+
+    console.log(flag == 1 ? '白' : '黑');
 
     // 已有棋
     if(this.flag) return;
@@ -51,7 +60,7 @@ function handleClick(){
                 location.reload();
             })
         }else{
-           AI && calcAi.call(this);
+           calcAi();
         }
     }
 }
@@ -67,11 +76,14 @@ function calcReulst(){
 function getResult(target){
     // 筛选出与当前棋子颜色相同的所有棋子并排序(排序是为了后续判断是否连续)
     let test;
-    if(AI){
-        rest = target.filter(v => v.flag === 2).sort((a, b) => (a.$x-b.$x));
-    }else{
-        rest = target.filter(v => v.flag === this.flag).sort((a, b) => (a.$x-b.$x));
-    }
+    // if(AI){
+    //     rest = target.filter(v => v.flag === 2).sort((a, b) => (a.$x-b.$x));
+    // }else{
+    //     rest = target.filter(v => v.flag === this.flag).sort((a, b) => (a.$x-b.$x));
+    // }
+
+    rest = target.filter(v => v.flag === this.flag).sort((a, b) => (a.$x-b.$x));
+
     const len = rest.length;
     if(len < 5){
         calc.push(rest);
@@ -239,16 +251,19 @@ function leftTop(x, y, target){
 
 
 function calcAi(){
-    console.log('Ai下棋了！！！', calc)
+    console.log(calc, 'calc')
+    const flag = count % 2 + 1;
+    let target;
     calc = calc.sort((a, b) => a.length - b.length);
-    const target = calc[calc.length-1].sort((a,b)=>a.$y-b.$y);
+    target = calc[calc.length-1].sort((a,b)=>a.$y-b.$y);
     const last = target[target.length-1];
     const first = target[0];
 
+    if(!AI || flag == 2) return;
     
     if(target.length <= 1){
         console.log(last.$x, last.$y)
-        if(last.$x>=GRIDROW - 1){
+        if(last.$x >= GRIDROW - 1){
             grids[last.$x-1][last.$y-1].style.background = '#eee';
             grids[last.$x-1][last.$y-1].style.boxShadow = '0 0 10px 1px #111';
             grids[last.$x-1][last.$y-1].flag = 1;
@@ -355,10 +370,12 @@ function calcAi(){
             }
         }
     }
+    white = [];
 }
 
 
 function handleChange(e){
     AI = e.target.checked;
+    calcAi()
 }
 
