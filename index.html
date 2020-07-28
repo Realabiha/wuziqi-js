@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./static/img/favorite.ico">
+    <link rel="shortcut icon" href="./img/favorite.ico">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="./static/css/style.css">
-    <script type="text/javascript" src="./static/js/index.js" defer></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script type="text/javascript" src="./js/index.js" defer></script>
 </head>
 <body>
     <div class="chess">
-        <h5>
-            开启AI对战
-            <input type="checkbox" />
-        </h5>
-        <!-- <div class="test"></div> -->
+    </div>
+    <div class="chat">
+        <div class="content">
+            <p class="broadcast">玩家一进入</p>
+            <div class="input" pos="left">
+                <span>你好鸟龙科的煎熬了卢卡斯离开多久啊是善良的卢卡斯罗迪克撒娇</span>
+            </div>
+            <div class="input" pos="right">
+                <span>hello鸟龙科的煎熬了卢卡斯离开多久啊是善良的卢卡斯罗迪克撒娇</span>
+            </div>
+        </div>
+        <form action="" method="">
+            <input type="text" id="msg" name="msg" />
+            <input type="submit" value="发送" />
+        </form>
     </div>
 </body>
 </html>

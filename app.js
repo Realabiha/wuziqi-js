@@ -1,6 +1,10 @@
+const http = require('http');
 const express = require('express');
 const app = express();
 const hbs = require('hbs');
+
+const server = http.createServer(app);
+const IO = require('socket.io')(server);
 const port = process.env.PORT || 8686;
 
 // 设置模板引擎
@@ -15,12 +19,17 @@ app.use(express.static('static'));
 
 app.use('/', (req, res) => {
     res.render('index', {title: '五子棋'});
-
 })
-
-
-
-
-app.listen(port, _ => {
+IO.on('connection', socket => {
+    socket.emit('msg', 'hello client');
+    socket.on('push', msg => {})
+    socket.broadcast.emit('notice', 'who is comming')
+    socket.on('disconnect', _ => {
+        socket.broadcast.emit('notice', 'who is left')
+    })
+})
+IO.on('disconnect', socket => {
+})
+server.listen(port, _ => {
     console.log(`server is running at port ${port}!`)
 })

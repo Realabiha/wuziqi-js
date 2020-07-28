@@ -1,6 +1,6 @@
 const GRIDROW = 16, GRIDCOLUMN = 16;
 const chess = document.querySelector('.chess');
-const input = document.querySelector('input');
+// const input = document.querySelector('input[type=checkbox]');
 let grids = [], // 棋盘栅格 
     count = 1, // 回合计数
     result = false, // 回合结束标记 
@@ -10,7 +10,7 @@ let grids = [], // 棋盘栅格
     AI = false; // AI开关
 
 
-input.onchange = handleChange;
+// input.onchange = handleChange;
 
 for(let i = 0; i < GRIDROW; i ++){
     grids[i] = [];
@@ -21,11 +21,10 @@ for(let i = 0; i < GRIDROW; i ++){
     }
 }
 
-
 function createGrid(x, y){
     let grid;
     grid = document.createElement('div');
-    grid.classList.add('test');
+    grid.classList.add('light');
     grid.style.left = `${y*60 + 30}px`;
     grid.style.top = `${x*60 + 30}px`;
     grid.flag = 0;
@@ -249,7 +248,6 @@ function leftTop(x, y, target){
     getResult.call(this, target);
 }
 
-
 function calcAi(){
     console.log(calc, 'calc')
     const flag = count % 2 + 1;
@@ -373,9 +371,36 @@ function calcAi(){
     white = [];
 }
 
+// function handleChange(e){
+//     console.log(e)
+//     AI = e.target.checked;
+//     calcAi()
+// }
 
-function handleChange(e){
-    AI = e.target.checked;
-    calcAi()
-}
+
+
+
+
+// const Socket = require('socket.io-client'); referrence error: require is not defined;
+// IE9+
+const IO = io('ws://localhost:8686');
+const content = document.querySelector('.content');
+IO.on('connect', socket => {
+})
+IO.on('disconnect', _ => {
+    // console.log('disconnect')
+})
+IO.on('msg', msg => {
+    document.documentElement.scrollTop = content.scrollHeight;
+    console.log(msg, 'msg');
+})  
+IO.on('notice', notice => {
+    document.documentElement.scrollTop = content.scrollHeight;
+    console.log(notice, 'notice')
+})
+IO.emit('push', 'hello server')  
+
+
+
+
 

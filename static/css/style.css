@@ -6,16 +6,17 @@ html, body{
     background: papayawhip;
 }
 .chess{
-    position: relative;
+    position: fixed;
+    top: -40px;
+    left: 100px;
     width: 1024px;
     height: 1024px;
-    margin: 10px auto;
     background-image: url('../img/bg3.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     /* padding: 50px 30px 65px 42px; */
 }
-.test{
+.light{
     position: absolute;
     left: 50px;
     top: 50px;
@@ -24,4 +25,50 @@ html, body{
     padding: 5px;
     box-sizing: border-box;
     border-radius: 50%;
+}
+.chat{
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* float: right; */
+    width: 360px;
+    /* max-height: 100vh; */
+    z-index: 999;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0);
+    color: #fff;
+    /* overflow-y: scroll;   */
+}
+.content .input{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+    align-items: flex-start;
+}
+.content .broadcast{
+    text-align: center;
+    color: green;
+}
+.content .input[pos='right']{
+    color: greenyellow;
+    align-items: flex-end;
+}
+form{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    width: 100%;
+}
+form input{
+    flex: 1;
+    height: 30px;
+    border: none;
+}
+form input:first-of-type{
+    flex: 4;
+    padding: 0;
+    width: 70%;
+    outline: none;
 }
