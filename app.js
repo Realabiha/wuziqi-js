@@ -7,6 +7,8 @@ const server = http.createServer(app);
 const IO = require('socket.io')(server);
 const port = process.env.PORT || 8686;
 
+const users = [];
+
 // 设置模板引擎
 app.set('view engine', 'html');
 // 使用html后缀
@@ -20,16 +22,38 @@ app.use(express.static('static'));
 app.use('/', (req, res) => {
     res.render('index', {title: '五子棋'});
 })
+
+
 IO.on('connection', socket => {
-    socket.emit('msg', 'hello client');
-    socket.on('push', msg => {})
-    socket.broadcast.emit('notice', 'who is comming')
+    socket.on('login', user => {
+        socket.$user = user;
+        users.push({
+            id: user,
+        })
+        socket.broadcast.emit('login', JSON.stringify(`${user}`))
+    })
+    socket.on('msg', msg => {
+        socket.broadcast.emit('msg', msg);
+    })
+    socket.on('play', msg => {
+        socket.broadcast.emit('play', msg);
+    })
     socket.on('disconnect', _ => {
-        socket.broadcast.emit('notice', 'who is left')
+        socket.broadcast.emit('out', socket.$user);
     })
 })
-IO.on('disconnect', socket => {
-})
+
+
+
+
+
+
+
+
 server.listen(port, _ => {
     console.log(`server is running at port ${port}!`)
+})
+
+IO.on('disconnect', socket => {
+    // 调用api断开
 })

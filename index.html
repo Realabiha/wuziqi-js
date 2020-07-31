@@ -7,21 +7,13 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <script type="text/javascript" src="./js/index.js" defer></script>
+    <script type="module" src="./js/index.js"></script>
 </head>
 <body>
     <div class="chess">
     </div>
     <div class="chat">
-        <div class="content">
-            <p class="broadcast">玩家一进入</p>
-            <div class="input" pos="left">
-                <span>你好鸟龙科的煎熬了卢卡斯离开多久啊是善良的卢卡斯罗迪克撒娇</span>
-            </div>
-            <div class="input" pos="right">
-                <span>hello鸟龙科的煎熬了卢卡斯离开多久啊是善良的卢卡斯罗迪克撒娇</span>
-            </div>
-        </div>
+        <div class="content"></div>
         <form action="" method="">
             <input type="text" id="msg" name="msg" />
             <input type="submit" value="发送" />

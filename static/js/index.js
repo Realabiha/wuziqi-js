@@ -1,3 +1,6 @@
+import {a} from "./socket.js";
+// IE9+
+const socket = io('ws://localhost:8686');
 const GRIDROW = 16, GRIDCOLUMN = 16;
 const chess = document.querySelector('.chess');
 // const input = document.querySelector('input[type=checkbox]');
@@ -7,7 +10,11 @@ let grids = [], // 棋盘栅格
     calc = [], // ai计算
     black = [],
     white = [],
-    AI = false; // AI开关
+    AI = false, // AI开关
+
+    online = true,
+    flag = 2,
+    done = false;
 
 
 // input.onchange = handleChange;
@@ -34,25 +41,48 @@ function createGrid(x, y){
     return grid;
 }
 
-function handleClick(){
-    calc = [];
+
+function handleClick(e){
+    // context = this;
     // 2 = 黑棋 |  1 = 白棋  
-    const flag = count % 2 + 1;
-
-    console.log(flag == 1 ? '白' : '黑');
-
+    // const flag = count % 2 + 1;
     // 已有棋
-    if(this.flag) return;
+    if(this.flag || done) return;
+    done = true;
     // Ai下棋
-    if(flag === 1 && AI) return;
+    // if(flag === 1 && AI) return;
+
+
+
+
+    const {$x, $y} = this;
+    playChess.call(this, $x, $y, 0);
+    if(online){
+        socket.emit('play', `${$x}|${$y}`);
+    }
+    // count ++;
+}
+function playChess(x, y, socket = 1){
+    count = localStorage.getItem('count');
+
+    // calc = [];
+    // 2 = 黑棋 |  1 = 白棋  
+    flag = count % 2 + 1;
+    // console.log(num, flag);
+    // 已有棋
+    // if(this.flag) return;
+    // Ai下棋
+    // if(flag === 1 && AI) return;
+
     
     // 玩家
-    this.style.background = flag == 1 ? '#eee' : '#111';
-    this.style.boxShadow = `0px 0px 10px 1px ${flag == 1 ? '#000' : '#000'}`;
-    this.flag = flag;
+    grids[x][y].style.background = flag == 1 ? '#eee' : '#111';
+    grids[x][y].style.boxShadow = `0px 0px 10px 1px ${flag == 1 ? '#000' : '#000'}`;
+    grids[x][y].flag = flag;
     count ++;
+    socket && localStorage.setItem('count', count);
     if(count){
-        calcReulst.call(this);
+        calcReulst.call(grids[x][y]);
         if(result){
             setTimeout(_ => {
                 alert(flag == 1 ? '白棋胜' : '黑棋胜');
@@ -62,6 +92,7 @@ function handleClick(){
            calcAi();
         }
     }
+    socket && (done = false);
 }
 
 function calcReulst(){
@@ -74,7 +105,7 @@ function calcReulst(){
 // 判断相同颜色棋子颜色个数
 function getResult(target){
     // 筛选出与当前棋子颜色相同的所有棋子并排序(排序是为了后续判断是否连续)
-    let test;
+    let rest;
     // if(AI){
     //     rest = target.filter(v => v.flag === 2).sort((a, b) => (a.$x-b.$x));
     // }else{
@@ -221,12 +252,12 @@ function leftTop(x, y, target){
     }
     if(min <= 3){
         target.push(grids[x][y]);
-        for(i = 1; i <= 4; i ++){
+        for(let i = 1; i <= 4; i ++){
             if(x+i<=minLen-1&&y+i<=minLen-1){
                 target.push(grids[x+i][y+i]);
             }
         }
-        for(i = 1; i <= min; i ++){
+        for(let i = 1; i <= min; i ++){
             if(x-i>=0&&y-i>=0){
                 target.push(grids[x-i][y-i])
             }
@@ -381,26 +412,61 @@ function calcAi(){
 
 
 
-// const Socket = require('socket.io-client'); referrence error: require is not defined;
-// IE9+
-const IO = io('ws://localhost:8686');
+
 const content = document.querySelector('.content');
-IO.on('connect', socket => {
+const form = document.querySelector('form');
+const text = document.querySelector('input[type=text]');
+let user;
+socket.on('connect', _ => {
+    user = Date.now();
+    socket.emit('login', user);
+    socket.on('msg', msg => {
+       createMsgDiv(msg);           
+    });
+    socket.on('login', user => {
+        const p = document.createElement('p');
+        p.classList.add('broadcast');
+        p.innerHTML = `${JSON.parse(user)}进入了游戏`;
+        content.appendChild(p);
+    });
+    socket.on('play', play => {
+        console.log(play, 'play');
+        const temp = play.split('|')
+        playChess(temp[0], temp[1]);
+    });
+    socket.on('out', user => {
+        const p = document.createElement('p');
+        p.classList.add('broadcast');
+        p.innerHTML = `${user}离开了游戏`;
+        content.appendChild(p);
+    })
+
 })
-IO.on('disconnect', _ => {
-    // console.log('disconnect')
-})
-IO.on('msg', msg => {
+
+form.onsubmit = handleSend;
+
+function scrollDown(){
     document.documentElement.scrollTop = content.scrollHeight;
-    console.log(msg, 'msg');
-})  
-IO.on('notice', notice => {
-    document.documentElement.scrollTop = content.scrollHeight;
-    console.log(notice, 'notice')
+}
+
+function handleSend(e){
+    e.preventDefault();
+    const msg = `${user}: ${text.value}`;
+    socket.emit('msg', msg);
+    createMsgDiv(msg)
+    scrollDown();
+    form.reset();
+}
+function createMsgDiv(msg){
+    console.log(user, msg)
+    const pos = user == msg.split(':')[0] ? 'right' : 'left';
+    const div = document.createElement('div');
+    div.classList.add('input');
+    div.setAttribute('pos', pos);
+    div.innerHTML = msg;
+    content.appendChild(div);
+}
+
+socket.on('disconnect', _ => {
+    // 调用api断开
 })
-IO.emit('push', 'hello server')  
-
-
-
-
-
