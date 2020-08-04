@@ -7,9 +7,19 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script type="module" src="./js/socket.js"></script>
+    <script src="./js/utils.js"></script>
     <script type="module" src="./js/index.js"></script>
 </head>
 <body>
+    <div class="switch">
+        <label for="ai">AI
+            <input type="checkbox" id="ai" />
+        </label>
+        <label for="online">ONLINE
+            <input type="checkbox" id="online"/>
+        </label>
+    </div>
     <div class="chess">
     </div>
     <div class="chat">
