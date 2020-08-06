@@ -76,7 +76,7 @@ function playChess(x, y, socket = 1){
             aiWin[k] = -5;
         }
     }
-    playMusic('../sound/play.wav');
+    playMusic('../sound/play.WAV');
     getResult();
 }
 function gameOver(){
