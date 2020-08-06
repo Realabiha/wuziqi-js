@@ -20,8 +20,32 @@ html, body{
     justify-content: center;
     height: 100vh;
 }
-.switch .active{
+.switch label[for=ai]{
+    background-image: url('../img/robot.jpg');
+
+}
+.switch label[for=online]{
+    background-image: url('../img/online.jpg');
+}
+.switch label{
     color: green;
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.switch label:hover{
+ }
+.switch label::after{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 0, 0, .8);
+    content: '';
+}
+.switch label.active::after{
+    display: none;
 }
 .switch input{
     display: none;
