@@ -57,59 +57,38 @@ function calcScore(gridrow, gridcolumn){
     }
 }
 function evaluateAi(grids, gridrow, gridcolumn){
+    const playerMap = {
+        1: 200,
+        2: 400,
+        3: 2000,
+        4: 10000,
+    },
+    aiMap = {
+        1: 220,
+        2: 420,
+        3: 2200,
+        4: 20000,
+    }
     calcScore(GRIDROW, GRIDCOLUMN)
     for(let i = 0; i < gridrow; i++){
         for(let j = 0; j < gridcolumn; j++){
             if(grids[i][j].$value === 0){
                 for(let k = 0; k < total; k++){
                     if(totalWin[i][j][k]){
-                        if(playerWin[k] == 1){
-                            playerScore[i][j] += 200;
-                        }else if(playerWin[k] == 2){
-                            playerScore[i][j] += 400;
-                        }else if(playerWin[k] == 3){
-                            playerScore[i][j] += 2000;
-                        }else if(playerWin[k] == 4){
-                            playerScore[i][j] += 10000;
-                        }
-                        if(aiWin[k] == 1){
-                            aiScore[i][j] += 220;
-                        }else if(aiWin[k] == 2){
-                            aiScore[i][j] += 420;
-                        }else if(aiWin[k] == 3){
-                            aiScore[i][j] += 2200;
-                        }else if(aiWin[k] == 4){
-                            aiScore[i][j] += 20000;
-                        }
+                        playerScore[i][j] += playerMap[playerWin[k]] || 0;
+                        aiScore[i][j] += aiMap[aiWin[k]] || 0;
                     }   
                 }
-                if(aiScore[i][j] > max){
-                    max = aiScore[i][j];
-                    u = i;
-                    v = j;					
-                }
-                else if(aiScore[i][j] == max){
-                    if(playerScore[i][j] > playerScore[u][v]){
-                        u = i;
-                        v = j;
-                    }
-                }
-                if(playerScore[i][j] > max){
-                    max = playerScore[i][j];
-                    u = i;
-                    v = j;					
-				}
-				else if(playerScore[i][j] == max){
-					if(aiScore[i][j] > aiScore[u][v]){
-						u = i;
-						v = j;						
-					}
-				}
-                
-                
+                swapMax(i, j);
             }
         }
     }
+}
+function swapMax(i, j){
+    aiScore[i][j] > max && (max = aiScore[i][j], u = i, v = j);					
+    aiScore[i][j] == max && playerScore[i][j] > playerScore[u][v] && (u = i, v = j);
+    playerScore[i][j] > max && (max = playerScore[i][j], u = i, v = j);					
+    playerScore[i][j] == max && aiScore[i][j] > aiScore[u][v] && (u = i, v = j);						
 }
 function rowWin(gridrow, gridcolumn){
         for(let i = 0; i < gridrow; i++){

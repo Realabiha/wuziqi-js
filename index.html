@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./static/img/favorite.ico">
+    <link rel="shortcut icon" href="./img/favorite.ico">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="./static/css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <script src="./static/js/utils.js"></script>
-    <script src="./static/js/index.js" defer></script>
-    <script src="./static/js/ai.js" defer></script>
-    <script src="./static/js/socket.js" defer></script>
+    <script src="./js/utils.js"></script>
+    <script src="./js/index.js" defer></script>
+    <script src="./js/ai.js" defer></script>
+    <script src="./js/socket.js" defer></script>
 </head>
 <body>
     <div class="switch">
         <label for="ai" data-switch="ai" title="人机对战">
             <input type="checkbox" id="ai" />
         </label>
-        <label for="online" data-switch="online" title="线上对战">
-            <input type="checkbox" id="online"/>
+        <label for="online" data-switch="online" title="线上对战" class="active">
+            <input type="checkbox" id="online" checked/>
         </label>
     </div>
     <div class="chess">
@@ -30,5 +30,6 @@
             <input type="submit" value="发送" />
         </form>
     </div>
+    <audio src="./sound/play.WAV" class="play"></audio>   
 </body>
 </html>

@@ -3,12 +3,11 @@ const GRIDROW = 16, GRIDCOLUMN = 16;
 const chess = document.querySelector('.chess');
 const aiSwitch = document.querySelector('label[for=ai]');
 const onlineSwitch = document.querySelector('label[for=online]');
-
 let grids = [], 
     count = 1, 
     result = false,  
     AI = false, 
-    online = false, 
+    online = true, 
     done = false; // 对手回合是否落子
 
 const handleSwitch = function(e){
@@ -19,18 +18,18 @@ const handleSwitch = function(e){
 aiSwitch.addEventListener('change', handleSwitch, {})
 onlineSwitch.addEventListener('change', handleSwitch, {})
 
-const onlineCheck = function(){
+const onlineCheck = function(x, y){
     if(online){
         if(done) return;
         done = true;
-        socket.emit('play', `${$x}|${$y}`);
+        socket.emit('play', `${x}|${y}`);
     }
+    playChess.call(this, x, y, 0);
 }
 const handleClick = function(e){
     const {$x, $y} = this;
     if(this.$value) return;
-    onlineCheck();
-    playChess.call(this, $x, $y, 0);
+    onlineCheck($x, $y);
 }
 
 const bindClick = function(){
@@ -77,6 +76,7 @@ function playChess(x, y, socket = 1){
             aiWin[k] = -5;
         }
     }
+    playMusic('../sound/play.wav');
     getResult();
 }
 function gameOver(){
@@ -86,6 +86,7 @@ function gameOver(){
         const pos = localStorage.getItem('pos');
         const dir = Object.keys(DIR).find(prop => DIR[prop]);
         renderWin(dir, pos.split('|')[0], pos.split('|')[1]);
+        playMusic('../sound/victory.mp3');
     }
 }
 function renderWin(dir, i, j){
@@ -98,6 +99,7 @@ function renderWin(dir, i, j){
     console.log(i, j)
     grids[i][j].style.background = 'greenyellow';
     setTimeout( _ => {
+        
         alert('比赛结束')
     }, 100)
 }

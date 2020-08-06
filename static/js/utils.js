@@ -46,3 +46,9 @@ function directionCheck(i, j, gridrow, gridcolumn){
     localStorage.setItem('pos', `${i}|${j}`)
     return DIR.row | DIR.column | DIR.bottomTop | DIR.topBottom;
 }
+function playMusic(src){
+    const audio = new Audio(src);
+    audio.addEventListener('canplaythrough', function(){
+        audio.play()
+    }, {})  
+}
