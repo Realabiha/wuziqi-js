@@ -31,7 +31,8 @@ socket.on('connect', _ => {
     socket.on('play', play => {
         console.log(play, 'play');
         const temp = play.split('|');
-        playChess(temp[0], temp[1]);
+        color = ++temp[2] ;
+        playChess(temp[0], temp[1], temp[2]);
     });
     socket.on('out', user => {
         const p = document.createElement('p');

@@ -8,6 +8,7 @@ let grids = [],
     result = false,  
     AI = false, 
     online = true, 
+    color = 2,
     done = false; // 对手回合是否落子
 
 const handleSwitch = function(e){
@@ -22,7 +23,7 @@ const onlineCheck = function(x, y){
     if(online){
         if(done) return;
         done = true;
-        socket.emit('play', `${x}|${y}`);
+        socket.emit('play', `${x}|${y}|${color}`);
     }
     playChess.call(this, x, y, 0);
 }
@@ -62,13 +63,14 @@ const getResult = function(){
     }
 }
 function playChess(x, y, socket = 1){
-    count = online ? localStorage.getItem('count') : count;
     const flag = count % 2 + 1;
-    renderGrid(grids, x, y, flag);
-    count++;
     if(socket){
-        localStorage.setItem('count', count);
+        renderGrid(grids, x, y, flag);
+        count--;
         done = false;
+    }else{
+        renderGrid(grids, x, y, flag);
+        count++;
     }
     for(let k = 0; k < total; k++){
         if(totalWin[x][y][k]){
@@ -86,7 +88,7 @@ function gameOver(){
         const pos = localStorage.getItem('pos');
         const dir = Object.keys(DIR).find(prop => DIR[prop]);
         renderWin(dir, pos.split('|')[0], pos.split('|')[1]);
-        playMusic('../sound/victory.mp3');
+        
     }
 }
 function renderWin(dir, i, j){
@@ -98,8 +100,11 @@ function renderWin(dir, i, j){
     }
     console.log(i, j)
     grids[i][j].style.background = 'greenyellow';
-    setTimeout( _ => {
-        
-        alert('比赛结束')
-    }, 100)
+    playMusic('../sound/victory.mp3').then(
+        setTimeout( _ => {
+            location.reload();
+            alert(`比赛结束: ${count % 2 == 1 ? '白棋' : '黑棋'}胜`)
+        }, 100)
+    )
+    
 }

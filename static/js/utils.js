@@ -47,8 +47,16 @@ function directionCheck(i, j, gridrow, gridcolumn){
     return DIR.row | DIR.column | DIR.bottomTop | DIR.topBottom;
 }
 function playMusic(src){
-    const audio = new Audio(src);
-    audio.addEventListener('canplaythrough', function(){
-        audio.play()
-    }, {})  
+    return new Promise((resolve, reject) => {
+        const audio = new Audio(src);
+        audio.oncanplay = function(){
+            try {
+                this.play()
+                resolve()
+            } catch (error) {
+                console.log(error);
+            }
+        } 
+    })
+
 }
