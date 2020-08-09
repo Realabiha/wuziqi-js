@@ -9,13 +9,11 @@ function createGrid(x, y){
     grid.$x = x;
     return grid;
 }
-
-
 const renderGrid = function(grids, x, y, flag){
-    grids[x][y].$value = flag;
-    grids[x][y].classList.add(`${flag === 1  ? 'white' : 'black'}`);
+    const node = grids[x][y];
+    node.$value = flag;
+    node.classList.add(`${flag === 1  ? 'white' : 'black'}`);
 }
-
 const checkResult = function(grids, gridrow, gridcolumn){
     // 判断输赢时以一个方向为准
     // 循环遍历每一个棋子顺时针判断
@@ -42,8 +40,6 @@ function directionCheck(i, j, gridrow, gridcolumn){
         DIR.column &= i + q >= gridrow ? 0 : grids[i+q][j].$value;
         DIR.bottomTop &= i - q < 0 || j + q >= gridcolumn ? 0 : grids[i - q][j + q].$value;
     }
-    localStorage.setItem('dir', JSON.stringify(DIR));
-    localStorage.setItem('pos', `${i}|${j}`)
     return DIR.row | DIR.column | DIR.bottomTop | DIR.topBottom;
 }
 function playMusic(src){
@@ -59,4 +55,16 @@ function playMusic(src){
         } 
     })
 
+}
+function resetGame(grids, gridrow, gridcolumn){
+    for(let i = 0; i < gridrow; i++){
+        for(let j = 0; j < gridcolumn; j++){
+            const node = grids[i][j];
+            if(node.$value === 0) continue;
+            node.classList.remove('black');
+            node.classList.remove('white');
+            node.$value = 0;
+            count = 1;
+        }
+    }    
 }

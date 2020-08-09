@@ -1,8 +1,8 @@
 let totalWin = [];
 let total = 0;
-for(let i = 0; i < 16; i++){
+for(let i = 0; i < GRIDROW; i++){
     totalWin[i] = [];
-    for(let j = 0; j < 16; j++){
+    for(let j = 0; j < GRIDCOLUMN; j++){
         totalWin[i][j] = [];
     }
 }

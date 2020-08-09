@@ -17,27 +17,27 @@ const handleFocus = function(){
 form.addEventListener('submit', handleSend, {});
 text.addEventListener('focus', handleFocus, {});
 socket.on('connect', _ => {
-    user = Date.now();
-    socket.emit('login', user);
-    socket.on('msg', msg => {
-       createMsgDiv(msg);           
-    });
+    const id = Date.now();
+    socket.emit('login', id);
+    socket.on('msg', msg => createMsgDiv(msg));
     socket.on('login', user => {
         const p = document.createElement('p');
         p.classList.add('broadcast');
-        p.innerHTML = `${JSON.parse(user)}进入了游戏`;
+        const temp = user.split('|');
+        const txt = temp[1] === 'watcher' ? '开始观战' : '进入游戏';
+        p.textContent = `${temp[0]}${txt}`;
         content.appendChild(p);
+        localStorage.setItem('role', temp[1]);
     });
     socket.on('play', play => {
         console.log(play, 'play');
         const temp = play.split('|');
-        color = ++temp[2] ;
-        playChess(temp[0], temp[1], temp[2]);
+        playChess(temp[0], temp[1]);
     });
     socket.on('out', user => {
         const p = document.createElement('p');
         p.classList.add('broadcast');
-        p.innerHTML = `${user}离开了游戏`;
+        p.textContent = `${user}离开频道`;
         content.appendChild(p);
     })
     // 每次修改代码保存之后会触发重连
@@ -55,7 +55,7 @@ function createMsgDiv(msg){
     const div = document.createElement('div');
     div.classList.add('input');
     div.setAttribute('pos', pos);
-    div.innerHTML = msg;
+    div.textContent = msg;
     content.appendChild(div);
 }
 socket.on('disconnect', _ => {

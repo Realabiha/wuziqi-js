@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const IO = require('socket.io')(server);
 const port = process.env.PORT || 8686;
 
-const users = [];
+let users = [];
 
 // 设置模板引擎
 app.set('view engine', 'html');
@@ -26,29 +26,32 @@ app.use('/', (req, res) => {
 
 IO.on('connection', socket => {
     socket.on('login', user => {
+        users.push({id: user})
+        const len = users.length;
         socket.$user = user;
-        users.push({
-            id: user,
-        })
-        socket.broadcast.emit('login', JSON.stringify(`${user}`))
+        socket.role = len > 2 ? 'watcher' : 'player';
+        broadcastSocketMsg(socket, 'login', `${user}|${socket.role}`);
     })
     socket.on('msg', msg => {
-        socket.broadcast.emit('msg', msg);
+        broadcastSocketMsg(socket, 'msg', msg);
     })
     socket.on('play', msg => {
-        socket.broadcast.emit('play', msg);
+        socket.role === 'player' && broadcastSocketMsg(socket, 'play', msg);
     })
-    socket.on('disconnect', _ => {
-        socket.broadcast.emit('out', socket.$user);
+    socket.on('disconnect', function(){
+        const id = socket.$user;
+        users = getOnlineUsers(id)
+        broadcastSocketMsg(socket, 'out', id);
     })
 })
 
 
-
-
-
-
-
+function getOnlineUsers(id){
+    return users.filter(user => user.id !== id);
+}
+function broadcastSocketMsg(socket, type, msg){
+    socket.broadcast.emit(type, msg);
+}
 
 server.listen(port, _ => {
     console.log(`server is running at port ${port}!`)
