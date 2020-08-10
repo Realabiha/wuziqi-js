@@ -67,4 +67,53 @@ function resetGame(grids, gridrow, gridcolumn){
             count = 1;
         }
     }    
+
+}
+function initConfig(){
+    userConfig = JSON.parse(localStorage.getItem('config'));
+    userConfig.AI ? aiSwitch.classList.add('active') : aiSwitch.classList.remove('active'); 
+    userConfig.online ? onlineSwitch.classList.add('active') : onlineSwitch.classList.remove('active');
+    document.body.style.background = userConfig.bg;
+    bgPicker.style.background = userConfig.bg;
+    // switchWrap.style.background = userConfig.bg;
+    skinPicker.style.background = userConfig.skin;
+}
+function delegate(type, parent, selector, cb){
+    parent.addEventListener(type, e => {
+        // target事件触发元素 currentTarget事件绑定元素
+        let node = e.target;
+        try{
+            while(!node.matches(selector)){
+                node = node.parentNode;
+            }
+            e.path[0] === node && cb.call(node, e);
+        }catch(error){
+            console.log(error);
+        }
+    }, {})
+}
+function MsgBox(msg){
+    const u = 0.6;
+    const right = 300;
+    const delay = 500;
+    let span;
+    let createBox = function(){
+        const maxtop = u * document.documentElement.clientHeight; 
+        span = document.createElement('span');
+        span.classList.add('msgbox');
+        span.style.right = -right + 'px';
+        span.style.top = Math.random() * maxtop + 'px';
+        span.textContent = msg;
+        document.body.appendChild(span);
+        playMusic('../sound/msg.mp3').finally(res => {
+            fadeOut(span)
+        })
+    };
+    function fadeOut(dom){
+        setTimeout(_ => {
+            dom.classList.add('fadeout');
+        }, delay)
+    }
+    createBox();
+    return span;
 }

@@ -13,21 +13,27 @@
     <script src="./js/socket.js" defer></script>
 </head>
 <body>
-    <div class="switch">
-        <label for="ai" data-switch="ai" title="人机对战">
-            <input type="checkbox" id="ai" />
+    <div class="switch hide">
+        <div class="pbg"></div>
+        <label for="AI" data-switch="AI">
+            <input type="checkbox" id="AI" />
+            <p>人机对战模式，没错这是一段测试文本你别看了，没错这是一段测试文本你别看了，没错这是一段测试文本你别看了</p>
         </label>
-        <label for="online" data-switch="online" title="线上对战" class="active">
-            <input type="checkbox" id="online" checked/>
-        </label>
-        <label for="bg" data-switch="bg" title="更换背景" class="picker">
-            <input type="color" id="bg" />
-        </label>
-        <label for="robot" data-switch="robot" title="更换皮肤" class="picker">
-            <input type="checkbox" id="robot" />
-        </label>
-        <label for="online" data-switch="online" title="更换皮肤" class="picker">
+        <label for="online" data-switch="online" class="active">
             <input type="checkbox" id="online" />
+            <p>在线对战模式</p>
+        </label>
+        <label for="bg" data-switch="bg" class="picker">
+            <input type="color" id="bg" />
+            <p>更换页面背景</p>
+        </label>
+        <label for="skin" data-switch="skin" class="picker">
+            <input type="color" id="skin" />
+            <p>更换棋子皮肤</p>
+        </label>
+        <label for="hack" data-switch="hack" class="picker">
+            <input type="checkbox" id="hack" />
+            <p>开启科学下棋</p>
         </label>
     </div>
     <div class="chess">
@@ -36,8 +42,11 @@
         <div class="content"></div>
         <form action="" method="">
             <input type="text" id="msg" name="msg" />
-            <input type="submit" value="发送" />
+            <label for="submit">
+                <input type="submit" id="submit" value="发送" />
+            </label>
         </form>
     </div>
+    <span class="config" data-type="config" title="设置"></span>
 </body> 
 </html>

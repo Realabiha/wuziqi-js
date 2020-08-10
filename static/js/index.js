@@ -1,34 +1,96 @@
-window.onload = function(){
-    console.log('load')
-}
+
 
 // 2 = 黑棋 |  1 = 白棋  
 const GRIDROW = 16, GRIDCOLUMN = 16;
 const chess = document.querySelector('.chess');
-const aiSwitch = document.querySelector('label[for=ai]');
+const switchWrap = document.querySelector('.switch');
+const aiSwitch = document.querySelector('label[for=AI]');
+const hackSwitch = document.querySelector('label[for=hack]');
 const onlineSwitch = document.querySelector('label[for=online]');
 const bgPicker = document.querySelector('label[for=bg]');
+const skinPicker = document.querySelector('label[for=skin]');
+const showBg = document.querySelector('.pbg');
+const configBtn = document.querySelector('.config');
+
 let grids = [], 
     count = 1, 
     result = false,  
-    AI = false, 
-    online = true, 
     done = false; // 对手回合是否落子
 
+let userConfig = {
+    AI: false,
+    online: true,
+    bg: '#000',
+    skin: '#000',
+    hack: false
+} 
+initConfig();
 const handleSwitch = function(e){
-    let type = this.dataset.switch;
-    this.classList.toggle('active');
-    type == 'ai' ? AI = e.target.checked : online = e.target.checked;
+    console.log(e.target.checked);
+    const type = this.dataset.switch;
+    type === 'AI' ? userConfig.AI = e.target.checked : userConfig.online = e.target.checked;
+    userConfig[type] = e.target.checked;
+    userConfig[type] ? this.classList.add('active') : this.classList.remove('active');
+    localStorage.setItem('config', JSON.stringify(userConfig));
+    const dom = new MsgBox('测试文本');
 }
 const handlePick = function(e){
-    console.log(e.target.value);
-    document.body.style.background = e.target.value;
+    console.log(11111);
+    const type = this.dataset.switch;
+    type === 'bg' ? document.body.style.background = e.target.value : '';
+    userConfig[type] = e.target.value;
+    localStorage.setItem('config', JSON.stringify(userConfig));
 }
-aiSwitch.addEventListener('change', handleSwitch, {})
-onlineSwitch.addEventListener('change', handleSwitch, {})
+const handleHack = function(e){
+    if(userConfig.AI) userConfig.hack = e.target.checked;
+}
+const handleMouseOver = function(e){
+    let {width, height, left, top} = this.querySelector('p').getBoundingClientRect();
+    const temp = {width, height, left, top};
+    switchWrap.classList.add('hover');
+    Object.keys(temp).forEach(prop => {
+        showBg.style[prop] = temp[prop] + 'px';
+    })
+    showBg.style.borderRadius = '10px';
+    setTimeout(_ => {
+        this.classList.add('hover');
+    }, 100)
+}
+const handleMouseOut = function(e){
+    switchWrap.classList.remove('hover');
+    setTimeout(_ => {
+        this.classList.remove('hover');
+    }, 100)
+}
+const handleMouseEnter = function(e){
+    switchWrap.classList.remove('hide');
+}
+const handleMouseLeave = function(e){
+    this.classList.add('hide');
+}
+const handleResize = function(e){
+    let {width, height, left, top} = switchWrap.querySelector('p').getBoundingClientRect();
+    const temp = {width, height, left, top};
+    Object.keys(temp).forEach(prop => {
+        showBg.style[prop] = temp[prop] + 'px';
+    })
+    showBg.style.borderRadius = '10px';
+
+}
+
+aiSwitch.addEventListener('change', handleSwitch, {});
+onlineSwitch.addEventListener('change', handleSwitch, {});
+hackSwitch.addEventListener('change', handleHack, {});
 bgPicker.addEventListener('change', handlePick, {});
+skinPicker.addEventListener('change', handlePick, {});
+delegate('mouseover', switchWrap, '.switch label', handleMouseOver);
+delegate('mouseout', switchWrap, '.switch label', handleMouseOut);
+switchWrap.addEventListener('mouseleave', handleMouseLeave, {})
+configBtn.addEventListener('mouseenter', handleMouseEnter, {});
+window.addEventListener('resize', handleResize, {});
+
 const onlineCheck = function(x, y){
-    if(online){
+    if(userConfig.online){
         const role = localStorage.getItem('role');
         if(done || role === 'watcher') return;
         done = true;
@@ -37,6 +99,7 @@ const onlineCheck = function(x, y){
     playChess.call(this, x, y, 0);
 }
 const handleClick = function(e){
+    e.stopPropagation();
     const {$x, $y} = this;
     if(this.$value) return;
     onlineCheck($x, $y);
@@ -58,7 +121,7 @@ bindClick();
 const getResult = function(){
     result = checkResult(grids, GRIDROW, GRIDCOLUMN);
     gameOver();
-    if(AI && count % 2 == 0){
+    if(userConfig.AI && count % 2 == 0){
         evaluateAi(grids, GRIDROW, GRIDCOLUMN)
         renderGrid(grids, u, v, 1);
         count++;
@@ -70,7 +133,7 @@ const getResult = function(){
         }
         evaluateAi(grids, GRIDROW, GRIDCOLUMN)
         console.log(u, v);
-        grids[u][v].style.border = '3px solid greenyellow';
+        userConfig.hack && (grids[u][v].style.border = '3px solid greenyellow');
         gameOver();    
     }
 }
@@ -84,7 +147,7 @@ function playChess(x, y, socket = 1){
             aiWin[k] = -5;
         }
     }
-    playMusic('../sound/cat.wav').finally(res => {
+    playMusic('../sound/play.wav').finally(res => {
         getResult();
     });
 }

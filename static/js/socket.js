@@ -17,8 +17,8 @@ const handleFocus = function(){
 form.addEventListener('submit', handleSend, {});
 text.addEventListener('focus', handleFocus, {});
 socket.on('connect', _ => {
-    const id = Date.now();
-    socket.emit('login', id);
+    user = Date.now();
+    socket.emit('login', user);
     socket.on('msg', msg => createMsgDiv(msg));
     socket.on('login', user => {
         const p = document.createElement('p');
@@ -47,7 +47,7 @@ socket.on('connect', _ => {
 })
 
 function scrollDown(){
-    document.documentElement.scrollTop = content.scrollHeight;
+    document.documentElement.scrollBottom = content.scrollHeight;
 }
 function createMsgDiv(msg){
     console.log(user, msg)
