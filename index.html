@@ -11,13 +11,14 @@
     <script src="./js/index.js" defer></script>
     <script src="./js/ai.js" defer></script>
     <script src="./js/socket.js" defer></script>
+    <script src="./js/live.js" defer></script>
 </head>
 <body>
     <div class="switch hide">
         <div class="pbg"></div>
         <label for="AI" data-switch="AI">
             <input type="checkbox" id="AI" />
-            <p>人机对战模式，没错这是一段测试文本你别看了，没错这是一段测试文本你别看了，没错这是一段测试文本你别看了</p>
+            <p>人机对战模式</p>
         </label>
         <label for="online" data-switch="online" class="active">
             <input type="checkbox" id="online" />
@@ -29,11 +30,11 @@
         </label>
         <label for="skin" data-switch="skin" class="picker">
             <input type="color" id="skin" />
-            <p>更换棋子皮肤</p>
+            <p>更换棋子皮肤，待开发功能别点我</p>
         </label>
         <label for="hack" data-switch="hack" class="picker">
             <input type="checkbox" id="hack" />
-            <p>开启科学下棋</p>
+            <p>开启科学下棋，我是一个黑科技</p>
         </label>
     </div>
     <div class="chess">
@@ -46,6 +47,10 @@
                 <input type="submit" id="submit" value="发送" />
             </label>
         </form>
+    </div>
+    <div class="live">
+        <video class="online" autoplay></video>
+        <video class="local" autoplay muted></video>
     </div>
     <span class="config" data-type="config" title="设置"></span>
 </body> 

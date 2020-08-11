@@ -1,5 +1,3 @@
-
-
 // 2 = 黑棋 |  1 = 白棋  
 const GRIDROW = 16, GRIDCOLUMN = 16;
 const chess = document.querySelector('.chess');
@@ -20,29 +18,34 @@ let grids = [],
 let userConfig = {
     AI: false,
     online: true,
-    bg: '#000',
+    bg: '#2a473d',
     skin: '#000',
     hack: false
 } 
 initConfig();
 const handleSwitch = function(e){
-    console.log(e.target.checked);
+    const checked = e.target.checked;
     const type = this.dataset.switch;
-    type === 'AI' ? userConfig.AI = e.target.checked : userConfig.online = e.target.checked;
-    userConfig[type] = e.target.checked;
+    const status = checked ? '开启' : '关闭';
+    const txt = type === 'AI' ? `人机对战${status}` : `在线对战开启${status}`;
+    type === 'AI' ? userConfig.AI = checked : userConfig.online = checked;
+    userConfig[type] = checked;
     userConfig[type] ? this.classList.add('active') : this.classList.remove('active');
     localStorage.setItem('config', JSON.stringify(userConfig));
-    const dom = new MsgBox('测试文本');
+    new MsgBox(txt, '../sound/switch.mp3');
 }
 const handlePick = function(e){
-    console.log(11111);
     const type = this.dataset.switch;
-    type === 'bg' ? document.body.style.background = e.target.value : '';
-    userConfig[type] = e.target.value;
+    const color = e.target.value;
+    const txt = type === 'bg' ? '背景已更换' : '皮肤已更换';
+    type === 'bg' ? (document.body.style.background = color, this.style.background = color) : '';
+    userConfig[type] = color;
     localStorage.setItem('config', JSON.stringify(userConfig));
+    new MsgBox(txt, '../sound/switch.mp3');
 }
 const handleHack = function(e){
     if(userConfig.AI) userConfig.hack = e.target.checked;
+    localStorage.setItem('config', JSON.stringify(userConfig));
 }
 const handleMouseOver = function(e){
     let {width, height, left, top} = this.querySelector('p').getBoundingClientRect();

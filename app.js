@@ -20,6 +20,7 @@ app.set('views', __dirname);
 app.use(express.static('static'));
 
 app.use('/', (req, res) => {
+    console.log(req.params.id);
     res.render('index', {title: '五子棋'});
 })
 

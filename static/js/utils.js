@@ -92,7 +92,7 @@ function delegate(type, parent, selector, cb){
         }
     }, {})
 }
-function MsgBox(msg){
+function MsgBox(msg, src){
     const u = 0.6;
     const right = 300;
     const delay = 500;
@@ -105,13 +105,16 @@ function MsgBox(msg){
         span.style.top = Math.random() * maxtop + 'px';
         span.textContent = msg;
         document.body.appendChild(span);
-        playMusic('../sound/msg.mp3').finally(res => {
+        playMusic(src).finally(res => {
             fadeOut(span)
         })
     };
     function fadeOut(dom){
         setTimeout(_ => {
             dom.classList.add('fadeout');
+            setTimeout(_ => {
+                document.body.removeChild(dom);
+            }, delay)
         }, delay)
     }
     createBox();
