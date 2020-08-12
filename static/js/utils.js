@@ -46,15 +46,13 @@ function playMusic(src){
     return new Promise((resolve, reject) => {
         const audio = new Audio(src);
         audio.oncanplay = function(){
-            try {
-                this.play()
-                resolve()
-            } catch (error) {
-                console.log(error);
-            }
+            this.play()
+            resolve()
+        }
+        audio.onerror = function(){
+            reject();
         } 
     })
-
 }
 function resetGame(grids, gridrow, gridcolumn){
     for(let i = 0; i < gridrow; i++){
@@ -70,12 +68,12 @@ function resetGame(grids, gridrow, gridcolumn){
 
 }
 function initConfig(){
-    userConfig = JSON.parse(localStorage.getItem('config'));
+    const config = JSON.parse(localStorage.getItem('config'));
+    if(config) userConfig = config;
     userConfig.AI ? aiSwitch.classList.add('active') : aiSwitch.classList.remove('active'); 
     userConfig.online ? onlineSwitch.classList.add('active') : onlineSwitch.classList.remove('active');
     document.body.style.background = userConfig.bg;
     bgPicker.style.background = userConfig.bg;
-    // switchWrap.style.background = userConfig.bg;
     skinPicker.style.background = userConfig.skin;
 }
 function delegate(type, parent, selector, cb){
@@ -83,12 +81,16 @@ function delegate(type, parent, selector, cb){
         // target事件触发元素 currentTarget事件绑定元素
         let node = e.target;
         try{
-            while(!node.matches(selector)){
+            while(node.matches){
+                if(node.matches(selector)){
+                    cb.call(node, e);
+                    // e.path[0] === node && cb.call(node, e);
+                    return;
+                }
                 node = node.parentNode;
             }
-            e.path[0] === node && cb.call(node, e);
         }catch(error){
-            console.log(error);
+            // console.log(error);
         }
     }, {})
 }
@@ -97,6 +99,9 @@ function MsgBox(msg, src){
     const right = 300;
     const delay = 500;
     let span;
+    let init = function(){
+        createBox();
+    }
     let createBox = function(){
         const maxtop = u * document.documentElement.clientHeight; 
         span = document.createElement('span');
@@ -109,6 +114,7 @@ function MsgBox(msg, src){
             fadeOut(span)
         })
     };
+    init();
     function fadeOut(dom){
         setTimeout(_ => {
             dom.classList.add('fadeout');
@@ -117,6 +123,5 @@ function MsgBox(msg, src){
             }, delay)
         }, delay)
     }
-    createBox();
     return span;
 }

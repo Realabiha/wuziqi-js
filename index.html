@@ -14,7 +14,7 @@
     <script src="./js/live.js" defer></script>
 </head>
 <body>
-    <div class="switch hide">
+    <div class="switch">
         <div class="pbg"></div>
         <label for="AI" data-switch="AI">
             <input type="checkbox" id="AI" />
@@ -39,12 +39,23 @@
     </div>
     <div class="chess">
     </div>
+    <div class="users">
+        <ul class="list">
+            
+        </ul>
+    </div>
     <div class="chat">
         <div class="content"></div>
         <form action="" method="">
+            <label for="radio" title="语音">
+                <input type="button" id="radio" />
+            </label>
             <input type="text" id="msg" name="msg" />
-            <label for="submit">
-                <input type="submit" id="submit" value="发送" />
+            <!-- <label for="submit" title="发送"> -->
+                <!-- <input type="submit" id="submit" /> -->
+            <!-- </label> -->
+            <label for="video" title="视频">
+                <input type="button" id="video" />
             </label>
         </form>
     </div>

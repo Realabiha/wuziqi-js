@@ -1,10 +1,7 @@
 let isAlreadyCalling = false;
 let getCalled = false;
-
 const existingCalls = [];
-
 const { RTCPeerConnection, RTCSessionDescription } = window;
-
 const peerConnection = new RTCPeerConnection();
 
 function unselectUsersFromList() {
@@ -16,7 +13,6 @@ function unselectUsersFromList() {
     el.setAttribute("class", "active-user");
   });
 }
-
 function createUserItemContainer(socketId) {
   const userContainerEl = document.createElement("div");
 
@@ -39,9 +35,6 @@ function createUserItemContainer(socketId) {
 
   return userContainerEl;
 }
-
-
-
 function updateUserList(socketIds) {
   const activeUserContainer = document.getElementById("active-user-container");
 
@@ -128,8 +121,6 @@ peerConnection.ontrack = function({ streams: [stream] }) {
     remoteVideo.srcObject = stream;
   }
 };
-
-
 
 // localStream
 navigator.getUserMedia({ video: true, audio: true },stream => {

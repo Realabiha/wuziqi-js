@@ -20,39 +20,55 @@ app.set('views', __dirname);
 app.use(express.static('static'));
 
 app.use('/', (req, res) => {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     res.render('index', {title: '五子棋'});
 })
 
 
 IO.on('connection', socket => {
-    socket.on('login', user => {
-        users.push({id: user})
-        const len = users.length;
-        socket.$user = user;
-        socket.role = len > 2 ? 'watcher' : 'player';
-        broadcastSocketMsg(socket, 'login', `${user}|${socket.role}`);
-    })
+    const { id } = socket;
+    listCheck(id) && users.push(id);
+
+    socket.emit('users', `${JSON.stringify(users)}`);
+    broadcastSocketMsg(socket, 'login', `${id}`);
+    broadcastSocketMsg(socket, 'users', `${JSON.stringify(users)}`);
+
+    // chat
     socket.on('msg', msg => {
         broadcastSocketMsg(socket, 'msg', msg);
     })
-    socket.on('play', msg => {
-        socket.role === 'player' && broadcastSocketMsg(socket, 'play', msg);
+
+    // invite
+    socket.on('invite', msg => {
+        const temp = msg.split('|');
+        console.log(msg, 'invite');
+        socket.to(temp[1]).emit('invite', msg);
     })
+    // call
+
+    // answer
+    socket.on('answer', msg => {
+        const temp = msg.split('|');
+        console.log(msg, 'answer');
+        socket.to(temp[1]).emit('answer', msg);
+    })
+    // response
+
+    // 
+    socket.on('play', msg => {
+        const temp = msg.split('|');
+        msg = `${temp[0]}|${temp[1]}|${socket.id}`
+        socket.to(temp[2]).emit('play', msg);
+    })
+    // refresh or close fire disconnect
     socket.on('disconnect', function(){
-        const id = socket.$user;
+        const { id } = socket;
+        console.log('disconnect', id)
         users = getOnlineUsers(id)
         broadcastSocketMsg(socket, 'out', id);
+        broadcastSocketMsg(socket, 'users', `${JSON.stringify(users)}`);
     })
 })
-
-
-function getOnlineUsers(id){
-    return users.filter(user => user.id !== id);
-}
-function broadcastSocketMsg(socket, type, msg){
-    socket.broadcast.emit(type, msg);
-}
 
 server.listen(port, _ => {
     console.log(`server is running at port ${port}!`)
@@ -61,3 +77,16 @@ server.listen(port, _ => {
 IO.on('disconnect', socket => {
     // 调用api断开
 })
+
+
+function getOnlineUsers(id){
+    return users.filter(user => user !== id);
+}
+function broadcastSocketMsg(socket, type, msg){
+    socket.broadcast.emit(type, msg);
+}
+function listCheck(id){
+    return users.find(u => u === id) === undefined;
+}
+
+

@@ -1,4 +1,5 @@
-const getlLocalVideo = async function(){
+async function getlLocalVideo(){
+  if(!liveConfig.radio) return;
   let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
   console.log(stream);
   const localVideo = document.querySelector('.local');
@@ -6,3 +7,5 @@ const getlLocalVideo = async function(){
   localVideo.srcObject = stream;
 }
 // getlLocalVideo();
+
+console.log(socket);
