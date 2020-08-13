@@ -11,7 +11,6 @@
     <script src="./js/index.js" defer></script>
     <script src="./js/ai.js" defer></script>
     <script src="./js/socket.js" defer></script>
-    <script src="./js/live.js" defer></script>
 </head>
 <body>
     <div class="switch">
@@ -47,21 +46,21 @@
     <div class="chat">
         <div class="content"></div>
         <form action="" method="">
-            <label for="radio" title="语音">
-                <input type="button" id="radio" />
+            <label for="audio" title="语音">
+                <input type="checkbox" id="audio" />
             </label>
-            <input type="text" id="msg" name="msg" />
+            <input type="text" id="msg" name="msg" placeholder="Enter发送消息"/>
             <!-- <label for="submit" title="发送"> -->
                 <!-- <input type="submit" id="submit" /> -->
             <!-- </label> -->
             <label for="video" title="视频">
-                <input type="button" id="video" />
+                <input type="checkbox" id="video" />
             </label>
         </form>
     </div>
     <div class="live">
         <video class="online" autoplay></video>
-        <video class="local" autoplay muted></video>
+        <video class="local" autoplay></video>
     </div>
     <span class="config" data-type="config" title="设置"></span>
 </body> 

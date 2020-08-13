@@ -27,6 +27,8 @@ readme.md|readme
 
 [Socket.io官网](https://socket.io/docs/)
 [WebRTC API(MDN中文)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
+>一个基本的RTCPeerConnection使用需要协调本地机器以及远端机器的连接，它可以通过在两台机器间生成Session Description的数据交换协议来实现。呼叫方发送一个offer(请求)，被呼叫方发出一个answer（应答）来回答请求。双方-呼叫方以及被呼叫方，最开始的时候都要建立他们各自的RTCPeerConnection对象。
+
 
 ---
 

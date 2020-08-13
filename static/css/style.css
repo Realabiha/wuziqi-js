@@ -25,7 +25,7 @@ ul, li{
 html,body{
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 body{
     width: 100%;
@@ -128,13 +128,14 @@ body{
 /* chess */
 .chess{
     position: absolute;
-    top: -40px;
+    top: 50%;
     left: 100px;
     width: 1024px;
     height: 1024px;
     background-image: url('../img/bg3.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    transform: translateY(-50%);
     /* z-index: 1000; */
 }
 .light{
@@ -150,13 +151,13 @@ body{
 
 /* users */
 .users{
-    width: 100px;
-    max-height: 100vh;
-    padding: 30px 5px;
-    background: #000;
+    width: 120px;
+    height: auto;
+    max-height: calc(100vh - 74px);
+    padding: 30px 5px 0px 0px;
     color: #fff;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 .users .list h4{
     text-align: center;
@@ -191,11 +192,11 @@ body{
     max-height: calc(100vh - 280px);
     min-height: 50px;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, .3);
+    background: rgba(0, 0, 0, .1);
     color: #fff;
     z-index: 1000;
     overflow: hidden;
-    font-size: 30px;
+    font-size: 25px;
     /* overflow-y: -moz-scrollbars-none; */
     /* -ms-overflow-style: none; */
 }
@@ -238,8 +239,7 @@ form label{
     flex: 1;
     height: 50px;
     border: none;
-    font-size: 30px;
-
+    font-size: 25px;
 }
 form label{
     background-repeat: no-repeat;
@@ -247,17 +247,19 @@ form label{
     background-size: cover;
     background-image: url(../img/send.png);    
 }
-form label[for=radio]{
-    background-image: url(../img/radio.png);    
+form label[for=audio]{
+    background-image: url(../img/audio.png);    
 }
 form label[for=video]{
     background-image: url(../img/video.png);    
 }
-form input:first-of-type{
+form > input{
     flex: 9;
     padding: 0;
     outline: none;
     background: #ccc;
+    padding: 5px 10px;
+    box-sizing: border-box;
 }
 form label input{
     display: none;

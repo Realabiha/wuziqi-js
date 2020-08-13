@@ -29,8 +29,8 @@ let playConfig = {
     player: '',
 }
 let liveConfig = {
-    radio: false,
-    video: false,
+    audio: true,
+    video: true,
     onLive: false,
     isCalling: false
 }

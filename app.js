@@ -44,22 +44,32 @@ IO.on('connection', socket => {
         console.log(msg, 'invite');
         socket.to(temp[1]).emit('invite', msg);
     })
-    // call
-
     // answer
     socket.on('answer', msg => {
         const temp = msg.split('|');
         console.log(msg, 'answer');
         socket.to(temp[1]).emit('answer', msg);
     })
-    // response
-
-    // 
     socket.on('play', msg => {
         const temp = msg.split('|');
         msg = `${temp[0]}|${temp[1]}|${socket.id}`
         socket.to(temp[2]).emit('play', msg);
     })
+
+    // call
+    socket.on('call', obj => {
+        // console.log(JSON.parse(obj));
+        const {offer, from, to} = JSON.parse(obj);
+        console.log(to, 'to');
+        socket.to(to).emit('call', obj);
+    })
+    // response
+    socket.on('response', obj => {
+        const {answer, from, to} = JSON.parse(obj);
+        console.log(to, 'to');
+        socket.to(from).emit('response', obj);
+    })
+    // 
     // refresh or close fire disconnect
     socket.on('disconnect', function(){
         const { id } = socket;
