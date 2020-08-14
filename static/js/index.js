@@ -33,7 +33,8 @@ let liveConfig = {
     video: true,
     onLive: false,
     isCalling: false,
-    to: ''
+    to: '',
+    from: ''
 }
 initConfig();
 const handleSwitch = function(e){
