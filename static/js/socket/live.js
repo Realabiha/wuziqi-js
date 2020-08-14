@@ -12,10 +12,10 @@ const handleMedia = async function(){
     val === 'audio' ? liveConfig.video = false : '';
     if(liveConfig.isCalling || liveConfig.onLive)
     return new MsgBox('邀请或聊天中', '../sound/msg.mp3');
+    const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
         await getLocalMedia();
-        const {player: to} = JSON.parse(localStorage.getItem('play'));
         handleSure(to)
         return;
     }
