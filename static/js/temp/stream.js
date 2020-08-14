@@ -61,7 +61,7 @@ socket.on("remove-user", ({ socketId }) => {
     elToRemove.remove();
   }
 });
-// confirm others call
+// 接收别人的call
 socket.on("call-made", async data => {
   if (getCalled) {
     const confirmed = confirm(
@@ -82,14 +82,14 @@ socket.on("call-made", async data => {
   );
   const answer = await peerConnection.createAnswer();
   await peerConnection.setLocalDescription(new RTCSessionDescription(answer));
-
+    // 回应别人的call
   socket.emit("make-answer", {
     answer,
     to: data.socket
   });
   getCalled = true;
 });
-// accept otehrs call
+// 别人接到你邀请后回应你
 socket.on("answer-made", async data => {
   await peerConnection.setRemoteDescription(
     new RTCSessionDescription(data.answer)
@@ -100,7 +100,7 @@ socket.on("answer-made", async data => {
     isAlreadyCalling = true;
   }
 });
-// target reject your call
+// 别人拒绝了你的邀请
 socket.on("call-rejected", data => {
   alert(`User: "Socket: ${data.socket}" rejected your call.`);
   unselectUsersFromList();

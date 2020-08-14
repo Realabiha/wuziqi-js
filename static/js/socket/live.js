@@ -46,7 +46,7 @@ RTCPC.addEventListener('track', handleTrack, {});
 
 // 音视频被邀请
 socket.on('call', obj => {
-    if(liveConfig.onLive) return new MsgBox('你在聊天中', '../sound/msg.mp3');
+    // if(liveConfig.onLive) return new MsgBox('你在聊天中', '../sound/msg.mp3');
     obj = JSON.parse(obj)
     const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
     result ? callSure(obj) : callRefuse(obj);
@@ -56,6 +56,7 @@ socket.on('response', async obj => {
     console.log(RTCPC.signalingState, 'state')  // have-local-offer
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
     // const {player: to} = JSON.parse(localStorage.getItem('play'));
+    if(liveConfig.onLive) return new MsgBox('你在聊天中', '../sound/msg.mp3');
     handleSure(to);
 })
 
@@ -93,7 +94,7 @@ function handleRefuse(){
 // 应答
 async function callSure({offer, from, to}){
     console.log(to === socket.id, 'to');
-    liveConfig.onLive = true;
+    // liveConfig.onLive = true;
     await getLocalMedia()
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     console.log(RTCPC.signalingState) // have-remote-offer
