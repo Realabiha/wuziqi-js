@@ -26,6 +26,7 @@ const handleTrack = function(e){
     const SRC_OBJECT = 'srcObject' in v ? "srcObject" :
         'mozSrcObject' in v ? "mozSrcObject" :
         'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
+    v.style.width = '100%';
     v[SRC_OBJECT] = e.streams[0];
 }
 
@@ -67,6 +68,7 @@ async function getLocalMedia(){
         'mozSrcObject' in v ? "mozSrcObject" :
         'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
     const {audio, video} = liveConfig;
+    console.log(video, 'video');
     const stream = await navigator.mediaDevices.getUserMedia({audio, video});
     v.style.width = 360 + 'px';
     v[SRC_OBJECT] = stream;
