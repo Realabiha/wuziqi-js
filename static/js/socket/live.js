@@ -68,7 +68,7 @@ async function getLocalMedia(){
     v[SRC_OBJECT] = stream;
     stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
 }
-getLocalMedia();
+// getLocalMedia();
 // 确认邀请
 async function handleSure(to){
     !liveConfig.isCalling && (liveConfig.isCalling = true);
