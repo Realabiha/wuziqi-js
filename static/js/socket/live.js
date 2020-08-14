@@ -55,6 +55,8 @@ socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
     console.log(RTCPC.signalingState, 'state')  // have-local-offer
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
+    // const {player: to} = JSON.parse(localStorage.getItem('play'));
+    handleSure(to);
 })
 
 async function getLocalMedia(){
