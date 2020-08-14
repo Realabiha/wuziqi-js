@@ -24,7 +24,7 @@ const handleTrack = function(e){
         'mozSrcObject' in v ? "mozSrcObject" :
         'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
     v[SRC_OBJECT] = e.streams[0];
-    v.onloadedmetadata = _ => v.play();
+    // v.onloadedmetadata = _ => v.play();
     // v.src = window.URL.createObjectURL(e.streams[0]);
 }
 
@@ -76,12 +76,13 @@ async function getLocalMedia(){
     stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
     // RTCPC.addStream(stream);
 }
+getLocalMedia();
 // 确认邀请
 async function handleSure(to){
     console.log(to, 'to');
     liveConfig.isCalling = true;
     const { id: from} = socket;
-    await getLocalMedia();
+    // await getLocalMedia();
     const offer = await RTCPC.createOffer();
     console.log(offer, 'offer');
     await RTCPC.setLocalDescription(new RTCSessionDescription(offer)); 
@@ -96,7 +97,7 @@ function handleRefuse(){
 async function callSure({offer, from, to}){
     console.log(to === socket.id, 'to');
     // liveConfig.onLive = true;
-    await getLocalMedia()
+    // await getLocalMedia()
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     console.log(RTCPC.signalingState) // have-remote-offer
     const answer = await RTCPC.createAnswer();
