@@ -7,7 +7,7 @@ const RTCPC = new RTCPeerConnection();
 // RTCPC.sctp()
 // RTCPC = null
 
-const handleMedia = async function(){
+const handleMedia = function(){
     let val = this.getAttribute('for');
     liveConfig.video = !(val === 'audio'); 
     if(liveConfig.isCalling || liveConfig.onLive)
@@ -15,7 +15,7 @@ const handleMedia = async function(){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        await getLocalMedia();
+        getLocalMedia();
         handleSure(to)
         return;
     }
@@ -91,7 +91,7 @@ function handleRefuse(){
 // 接受邀请
 async function callSure({offer, from, to}){
     !liveConfig.isCalling && (liveConfig.isCalling = true);
-    await getLocalMedia();
+    getLocalMedia();
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await RTCPC.createAnswer();
     await RTCPC.setLocalDescription(answer);
