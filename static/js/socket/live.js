@@ -24,7 +24,7 @@ const handleTrack = function(e){
         'mozSrcObject' in v ? "mozSrcObject" :
         'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
     v[SRC_OBJECT] = e.streams[0];
-    v.onloadedmetadata = _ => v.play();
+    // v.onloadedmetadata = _ => v.play();
     // v.src = window.URL.createObjectURL(e.streams[0]);
 }
 
