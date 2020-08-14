@@ -3,14 +3,18 @@ const video = document.querySelector('label[for=video]');
 const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 const RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
 const RTCPC = new RTCPeerConnection();
-const handleMedia = async function(){
+
+// RTCPC.sctp()
+// RTCPC = null
+
+const handleMedia = function(){
     let val = this.getAttribute('for');
     val === 'audio' ? liveConfig.video = false : '';
     if(liveConfig.isCalling || liveConfig.onLive)
     return new MsgBox('邀请或聊天中', '../sound/msg.mp3');
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
-    result ? await handleSure(to) : handleRefuse();
+    result ? handleSure(to) : handleRefuse();
 }
 const handleTrack = function(e){
     console.log(e, 'remote')
@@ -19,7 +23,8 @@ const handleTrack = function(e){
     const SRC_OBJECT = 'srcObject' in v ? "srcObject" :
         'mozSrcObject' in v ? "mozSrcObject" :
         'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
-    v[SRC_OBJECT] = e.streams[0];
+    // v[SRC_OBJECT] = e.streams[0];
+    v.src = window.URL.createObjectURL(e.streams[0]);
 }
 
 // after getMedia addTrack fire
@@ -63,15 +68,16 @@ async function getLocalMedia(){
     const stream = await navigator.mediaDevices.getUserMedia({audio, video});
     v.style.width = 360 + 'px';
     v[SRC_OBJECT] = stream;
-    stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
+    // stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
+    RTCPC.addStream(stream);
 }
-// getLocalMedia();
+getLocalMedia();
 // 确认邀请
 async function handleSure(to){
     console.log(to, 'to');
     liveConfig.isCalling = true;
     const { id: from} = socket;
-    await getLocalMedia();
+    // await getLocalMedia();
     const offer = await RTCPC.createOffer();
     console.log(offer, 'offer');
     await RTCPC.setLocalDescription(new RTCSessionDescription(offer)); 
@@ -86,7 +92,7 @@ function handleRefuse(){
 async function callSure({offer, from, to}){
     console.log(to === socket.id, 'to');
     liveConfig.onLive = true;
-    await getLocalMedia()
+    // await getLocalMedia()
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     console.log(RTCPC.signalingState) // have-remote-offer
     const answer = await RTCPC.createAnswer();
