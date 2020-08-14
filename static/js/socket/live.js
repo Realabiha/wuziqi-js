@@ -48,8 +48,9 @@ RTCPC.addEventListener('track', handleTrack, {});
 socket.on('call', obj => {
     // if(liveConfig.onLive) return new MsgBox('你在聊天中', '../sound/msg.mp3');
     obj = JSON.parse(obj)
-    const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
-    result ? callSure(obj) : callRefuse(obj);
+    // const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
+    // result ? callSure(obj) : callRefuse(obj);
+    callSure(obj);
 })
 socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
