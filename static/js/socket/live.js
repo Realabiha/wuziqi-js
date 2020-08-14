@@ -9,8 +9,7 @@ const RTCPC = new RTCPeerConnection();
 
 const handleMedia = async function(){
     let val = this.getAttribute('for');
-    liveConfig.video = !val === 'audio' 
-    val === 'audio' ? liveConfig.video = false : '';
+    liveConfig.video = !(val === 'audio'); 
     if(liveConfig.isCalling || liveConfig.onLive)
     return new MsgBox('邀请或聊天中', '../sound/msg.mp3');
     const {player: to} = JSON.parse(localStorage.getItem('play'));
