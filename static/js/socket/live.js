@@ -89,6 +89,7 @@ function handleRefuse(){
 // 接受邀请
 async function callSure({offer, from, to}){
     !liveConfig.isCalling && (liveConfig.isCalling = true);
+    await getLocalMedia();
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await RTCPC.createAnswer();
     await RTCPC.setLocalDescription(answer);
