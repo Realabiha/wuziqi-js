@@ -44,7 +44,7 @@ RTCPC.addEventListener('track', handleTrack, {});
 // 音视频被邀请
 socket.on('call', obj => {
     obj = JSON.parse(obj)
-    if(!liveConfig.onLive){
+    if(!liveConfig.isCalling){
         const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
         result ? callSure(obj) : callRefuse(obj);
         return;
