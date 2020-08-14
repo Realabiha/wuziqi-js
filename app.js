@@ -28,7 +28,6 @@ app.use('/', (req, res) => {
 IO.on('connection', socket => {
     const { id } = socket;
     listCheck(id) && users.push(id);
-
     socket.emit('users', `${JSON.stringify(users)}`);
     broadcastSocketMsg(socket, 'login', `${id}`);
     broadcastSocketMsg(socket, 'users', `${JSON.stringify(users)}`);

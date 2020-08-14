@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
     <script src="./js/utils.js"></script>
-    <script src="./js/index.js" defer></script>
-    <script src="./js/ai.js" defer></script>
-    <script src="./js/socket.js" defer></script>
+    <script src="./js/socket.js"></script>
+    
 </head>
 <body>
     <div class="switch">
@@ -60,8 +59,14 @@
     </div>
     <div class="live">
         <video class="online" autoplay></video>
-        <video class="local" autoplay></video>
+        <video class="local" autoplay muted></video>
     </div>
     <span class="config" data-type="config" title="设置"></span>
+    <script src="./js/index.js"></script>
+    <script src="./js/AI/ai.js" async></script>
+    <script src="./js/socket/play.js" async></script>
+    <script src="./js/socket/chat.js" async></script>
+    <script src="./js/socket/live.js" async></script>
 </body> 
+
 </html>
