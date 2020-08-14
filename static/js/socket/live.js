@@ -36,7 +36,7 @@ const handleNeed = async function(e){
 audio.addEventListener('change', handleMedia, {});
 video.addEventListener('change', handleMedia, {});
 RTCPC.addEventListener('track', handleTrack, {});
-RTCPC.addEventListener('negotiationneeded', handleNeed, {})
+// RTCPC.addEventListener('negotiationneeded', handleNeed, {})
 
 // 音视频被邀请
 socket.on('call', obj => {
@@ -72,10 +72,10 @@ async function handleSure(to){
     liveConfig.isCalling = true;
     const { id: from} = socket;
     await getLocalMedia();
-    // const offer = await RTCPC.createOffer();
-    // console.log(offer, 'offer');
-    // await RTCPC.setLocalDescription(new RTCSessionDescription(offer)); 
-    // socket.emit('call', JSON.stringify({offer, from, to}))
+    const offer = await RTCPC.createOffer();
+    console.log(offer, 'offer');
+    await RTCPC.setLocalDescription(new RTCSessionDescription(offer)); 
+    socket.emit('call', JSON.stringify({offer, from, to}))
 }
 function handleRefuse(){
     liveConfig.isCalling = false;
