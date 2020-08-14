@@ -103,8 +103,8 @@ async function callSure({offer, from, to}){
     console.log(answer, 'answer');
     await RTCPC.setLocalDescription(answer);
     socket.emit('response', JSON.stringify({answer, from, to}));
-    const txt = '已接受邀请'
-    new MsgBox(txt, '../sound/msg.mp3');
+    // const txt = '已接受邀请'
+    // new MsgBox(txt, '../sound/msg.mp3');
 }
 function callRefuse(){
     liveConfig.onLive = false;   
