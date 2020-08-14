@@ -65,13 +65,13 @@ async function getLocalMedia(){
     v[SRC_OBJECT] = stream;
     stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
 }
-// getLocalMedia();
+getLocalMedia();
 // 确认邀请
 async function handleSure(to){
     console.log(to, 'to');
     liveConfig.isCalling = true;
     const { id: from} = socket;
-    await getLocalMedia();
+    // await getLocalMedia();
     // const offer = await RTCPC.createOffer();
     // console.log(offer, 'offer');
     // await RTCPC.setLocalDescription(new RTCSessionDescription(offer)); 
@@ -87,7 +87,7 @@ async function callSure({offer, from, to}){
     console.log(to === socket.id, 'to');
     liveConfig.onLive = true;
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
-    await getLocalMedia()
+    // await getLocalMedia()
     console.log(RTCPC.signalingState) // have-remote-offer
     const answer = await RTCPC.createAnswer();
     console.log(answer, 'answer');
