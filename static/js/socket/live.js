@@ -22,6 +22,8 @@ const handleMedia = function(){
     handleRefuse();
 }
 const handleTrack = function(e){
+    const {player: to} = JSON.parse(localStorage.getItem('play'));
+    if(to !== socket.id) return;
     const v = document.querySelector('.online');
     const stream = e.streams[0];
     v.style.width = '100%';
@@ -48,7 +50,7 @@ socket.on('call', obj => {
 })
 socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
-    // await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
+    await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
     handleSure(to);
 })
 
