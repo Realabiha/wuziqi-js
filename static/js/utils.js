@@ -131,9 +131,14 @@ function MsgBox(msg, src){
 }
 
 function preloadSrc(){
-    const resource = [ '../sound/ding.wav' , '../sound/msg.mp3', '../sound/play.wav' ,
-    '../sound/switch.mp3' , '../sound/victory.mp3' ]
-    resource.forEach(src => playMusic(src, 'muted'));
+    const resource = [ 
+        '../sound/ding.wav', 
+        '../sound/msg.mp3', 
+        '../sound/play.wav' ,
+        '../sound/switch.mp3' ,
+        '../sound/victory.mp3' 
+    ]
+    resource.forEach(src => new Audio(src));
 }
 preloadSrc();
 

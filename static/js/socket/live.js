@@ -12,7 +12,7 @@ const handleMedia = function(){
     liveConfig.video = !(val === 'audio'); 
     if(liveConfig.isCalling || liveConfig.onLive)
     return new MsgBox('邀请或聊天中', '../sound/msg.mp3');
-    const {player: to} = JSON.parse(localStorage.getItem('play'));
+    const { to } = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
         getLocalMedia();
@@ -22,8 +22,7 @@ const handleMedia = function(){
     handleRefuse();
 }
 const handleTrack = function(e){
-    const {player: to} = JSON.parse(localStorage.getItem('play'));
-    if(to === socket.id) return;
+    const { to } = JSON.parse(localStorage.getItem('play'));
     const v = document.querySelector('.online');
     const stream = e.streams[0];
     v.style.width = '100%';
@@ -41,18 +40,19 @@ RTCPC.addEventListener('track', handleTrack, {});
 // 音视频被邀请
 socket.on('call', obj => {
     obj = JSON.parse(obj)
-    if(!liveConfig.isCalling){
+    if(!liveConfig.isCalling && !liveConfig.onLive){
         const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
         result ? callSure(obj) : callRefuse(obj);
-        return;
     }
     callSure(obj);
 })
 socket.on('response', async obj => {
+    liveConfig.onLive = true;
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
     handleSure(to);
 })
+socket.on('busy', msg => {})
 
 async function getLocalMedia(){
     const v = document.querySelector('.local');
@@ -95,7 +95,7 @@ function handleRefuse(){
 }
 // 接受邀请
 async function callSure({offer, from, to}){
-    !liveConfig.isCalling && (liveConfig.isCalling = true);
+    !liveConfig.onLive && (liveConfig.onLive = true);
     getLocalMedia();
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await RTCPC.createAnswer();

@@ -22,11 +22,10 @@ let userConfig = {
     skin: '#ff0',
 } 
 let playConfig = {
-    audio: false,
-    video: false,
     onPlay: false,
     isInviting: false,
-    player: '',
+    to: '',
+    from: ''
 }
 let liveConfig = {
     audio: true,
@@ -118,9 +117,9 @@ const onlineCheck = function(x, y){
         const role = localStorage.getItem('role');
         if(done || role === 'watcher') return;
         done = true;
-        const { player } = JSON.parse(localStorage.getItem('play'))
-        console.log(player, 'player');
-        socket.emit('play', `${x}|${y}|${player}`);
+        const { to } = JSON.parse(localStorage.getItem('play'))
+        console.log(to, 'to');
+        socket.emit('play', `${x}|${y}|${to}`);
     }
     playChess.call(this, x, y, 0);
 }

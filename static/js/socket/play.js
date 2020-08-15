@@ -5,7 +5,8 @@ let users = [];
 const handleInvite = function(){
     if(userConfig.AI || !userConfig.online) return new MsgBox('请开启线上模式关闭AI模式');
     if(playConfig.onPlay || playConfig.isInviting) return new MsgBox('邀请或游戏中', '../sound/msg.mp3');
-    playConfig.player = this.dataset.id;
+    playConfig.to = this.dataset.id;
+    playConfig.from = socket.id;
     const result = window.confirm(`是否邀请${this.dataset.id.substring(0, 4)}？`);
     result ? handleConfirm.call(this) : handleCancel.call(this);
 }
@@ -17,11 +18,11 @@ socket.on('users', data => {
 })
 // 游戏被邀请
 socket.on('invite', msg => {
-    if(playConfig.onPlay) return new MsgBox('你在柚子中', '../sound/msg.mp3');
+    if(playConfig.onPlay || playConfig.isInviting) return new MsgBox('邀请或游戏中', '../sound/msg.mp3');
     const temp = msg.split('|');
     const result = window.confirm(`${temp[0].substring(0, 4)}正在挑战你，是否接受？`)
     if(result){
-        playConfig.player = temp[0];
+        playConfig.to = temp[0];
         localStorage.setItem('play', JSON.stringify(playConfig));
         inviteConfirm(temp[0]); 
         playConfig.onPlay = true;
@@ -32,7 +33,7 @@ socket.on('invite', msg => {
 // 游戏主动邀请结果
 socket.on('answer', msg => {
     const temp = msg.split('|');
-    playConfig.player = temp[0];
+    playConfig.to = temp[0];
     temp[0] = temp[0].substring(0, 4);
     if(temp[2] === '1'){
         localStorage.setItem('play', JSON.stringify(playConfig));
@@ -46,7 +47,6 @@ socket.on('answer', msg => {
 // 游戏线上模式对手落子
 socket.on('play', play => {
     const temp = play.split('|');
-    // playConfig.player = temp[2];
     playChess(temp[0], temp[1]);
 });
 function updateUserList(users){
