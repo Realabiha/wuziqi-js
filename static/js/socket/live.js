@@ -15,7 +15,7 @@ const handleMedia = function(){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        // getLocalMedia();
+        getLocalMedia();
         handleSure(to)
         return;
     }
@@ -46,7 +46,6 @@ const handleNeed = async function(e){
 audio.addEventListener('change', handleMedia, {});
 video.addEventListener('change', handleMedia, {});
 RTCPC.addEventListener('track', handleTrack, {});
-// RTCPC.addEventListener('negotiationneeded', handleNeed, {})
 
 // 音视频被邀请
 socket.on('call', obj => {
@@ -88,7 +87,7 @@ async function getLocalMedia(){
     }else{
         v.src = window.URL.createObjectURL(stream);
     }
-    stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
+    JSON.parse(localStorage.getItem('play')).player !== socket.id && stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
 }
 // 确认邀请
 async function handleSure(to){
