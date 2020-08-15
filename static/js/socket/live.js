@@ -26,7 +26,7 @@ const handleTrack = function(e){
     const stream = e.streams[0];
     v.style.width = '100%';
     if('srcObject' in v){
-        v[SRC_OBJECT] = stream;
+        v.srcObject = stream;
     }else{
         v.src = window.URL.createObjectURL(stream);
     }
@@ -61,7 +61,7 @@ socket.on('call', obj => {
 socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
-    handleSure(to);
+    // handleSure(to);
 })
 
 async function getLocalMedia(){
