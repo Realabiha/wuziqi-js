@@ -37,13 +37,12 @@ IO.on('connection', socket => {
         broadcastSocketMsg(socket, 'msg', msg);
     })
 
-    // invite
+    // ganme
     socket.on('invite', msg => {
         const temp = msg.split('|');
         console.log(msg, 'invite');
         socket.to(temp[1]).emit('invite', msg);
     })
-    // answer
     socket.on('answer', msg => {
         const temp = msg.split('|');
         console.log(msg, 'answer');
@@ -55,7 +54,7 @@ IO.on('connection', socket => {
         socket.to(temp[2]).emit('play', msg);
     })
 
-    // call
+    // live
     socket.on('call', obj => {
         // console.log(JSON.parse(obj));
         const {offer, from, to} = JSON.parse(obj);
@@ -68,7 +67,7 @@ IO.on('connection', socket => {
         console.log(to, 'to');
         socket.to(from).emit('response', obj);
     })
-    // 
+
     // refresh or close fire disconnect
     socket.on('disconnect', function(){
         const { id } = socket;
@@ -79,13 +78,14 @@ IO.on('connection', socket => {
     })
 })
 
+IO.on('disconnect', socket => {
+    // 调用api断开
+})
+
 server.listen(port, _ => {
     console.log(`server is running at port ${port}!`)
 })
 
-IO.on('disconnect', socket => {
-    // 调用api断开
-})
 
 
 function getOnlineUsers(id){

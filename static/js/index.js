@@ -38,13 +38,18 @@ let liveConfig = {
 }
 initConfig();
 const handleSwitch = function(e){
-    const checked = e.target.checked;
-    const type = this.dataset.switch;
-    const status = checked ? '开启' : '关闭';
-    const txt = type === 'AI' ? `人机对战${status}` : `在线对战开启${status}`;
-    type === 'AI' ? userConfig.AI = checked : userConfig.online = checked;
+    const { checked } = e.target;
+    const { switch: type } = this.dataset;
+    let status = '';
     userConfig[type] = checked;
-    userConfig[type] ? this.classList.add('active') : this.classList.remove('active');
+    if(checked){
+        status = '开启';
+        this.classList.add('active');
+    }else{
+        status = '关闭';
+        this.classList.remove('active');
+    }
+    const txt = `人机对战${status}`;
     localStorage.setItem('config', JSON.stringify(userConfig));
     new MsgBox(txt, '../sound/switch.mp3');
 }

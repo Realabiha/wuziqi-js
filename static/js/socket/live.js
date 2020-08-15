@@ -15,7 +15,7 @@ const handleMedia = function(){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        getLocalMedia();
+        // getLocalMedia();
         handleSure(to)
         return;
     }
@@ -23,11 +23,13 @@ const handleMedia = function(){
 }
 const handleTrack = function(e){
     const v = document.querySelector('.online');
-    const SRC_OBJECT = 'srcObject' in v ? "srcObject" :
-        'mozSrcObject' in v ? "mozSrcObject" :
-        'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
+    const stream = e.streams[0];
     v.style.width = '100%';
-    v[SRC_OBJECT] = e.streams[0];
+    if('srcObject' in v){
+        v[SRC_OBJECT] = stream;
+    }else{
+        v.src = window.URL.createObjectURL(stream);
+    }
 }
 
 // after getMedia addTrack fire
@@ -59,22 +61,35 @@ socket.on('call', obj => {
 socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
-    handleSure(to);
+    // handleSure(to);
 })
 
 async function getLocalMedia(){
     const v = document.querySelector('.local');
-    const SRC_OBJECT = 'srcObject' in v ? "srcObject" :
-        'mozSrcObject' in v ? "mozSrcObject" :
-        'webkitSrcObject' in v ? "webkitSrcObject" : "srcObject";
     const {audio, video} = liveConfig;
-    console.log(video, 'video');
+    if(navigator.mediaDevices.getUserMedia === undefined){
+        navigator.mediaDevices = {};
+        Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+            configurable: true,
+            enumerable: true,
+            get(){
+                const getMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                return getMedia ? getMedia.bind(navigator, {audio, video}) : Promise.reject( '您的浏览器不支持getUserMedia接口');      
+            },
+            set(value){
+                return value;
+            }
+        })
+    }
     const stream = await navigator.mediaDevices.getUserMedia({audio, video});
     v.style.width = 360 + 'px';
-    v[SRC_OBJECT] = stream;
+    if('srcObject' in v){
+        v.srcObject = stream;
+    }else{
+        v.src = window.URL.createObjectURL(stream);
+    }
     stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
 }
-// getLocalMedia();
 // 确认邀请
 async function handleSure(to){
     !liveConfig.isCalling && (liveConfig.isCalling = true);

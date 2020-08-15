@@ -46,7 +46,10 @@ function playMusic(src){
     return new Promise((resolve, reject) => {
         const audio = new Audio(src);
         audio.oncanplay = function(){
-            this.play()
+            try {
+                this.play()
+            } catch (error) {
+            }
             resolve()
         }
         audio.onerror = function(){
@@ -125,5 +128,14 @@ function MsgBox(msg, src){
     }
     return span;
 }
+
+function preloadSrc(){
+    const resource = [ '../sound/ding.wav' , '../sound/msg.mp3', '../sound/play.wav' ,
+    '../sound/switch.mp3' , '../sound/victory.mp3' ]
+    Promise.all(resource.map(src => playMusic(src))).then(res => {
+        console.log(res);
+    })
+}
+preloadSrc();
 
   
