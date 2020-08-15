@@ -15,7 +15,7 @@ const handleMedia = function(){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        // getLocalMedia();
+        getLocalMedia();
         handleSure(to)
         return;
     }
