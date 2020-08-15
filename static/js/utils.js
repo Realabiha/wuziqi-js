@@ -42,9 +42,10 @@ function directionCheck(i, j, gridrow, gridcolumn){
     }
     return DIR.row | DIR.column | DIR.bottomTop | DIR.topBottom;
 }
-function playMusic(src){
+function playMusic(src, muted){
     return new Promise((resolve, reject) => {
         const audio = new Audio(src);
+        muted && (audio.muted = muted);
         audio.oncanplay = function(){
             try {
                 this.play()
@@ -132,7 +133,7 @@ function MsgBox(msg, src){
 function preloadSrc(){
     const resource = [ '../sound/ding.wav' , '../sound/msg.mp3', '../sound/play.wav' ,
     '../sound/switch.mp3' , '../sound/victory.mp3' ]
-    Promise.all(resource.map(src => playMusic(src))).then(res => {
+    Promise.all(resource.map(src => playMusic(src, 'muted'))).then(res => {
         console.log(res);
     })
 }
