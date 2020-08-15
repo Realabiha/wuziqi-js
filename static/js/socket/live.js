@@ -15,7 +15,7 @@ const handleMedia = function(){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        getLocalMedia();
+        // getLocalMedia();
         handleSure(to)
         return;
     }
@@ -32,17 +32,6 @@ const handleTrack = function(e){
     }
 }
 
-// after getMedia addTrack fire
-const handleNeed = async function(e){
-    const { id: from} = socket;
-    const {player: to} = JSON.parse(localStorage.getItem('play'));
-    console.log(e, 'e');
-    const offer = await RTCPC.createOffer();
-    console.log(offer, 'offer');
-    await RTCPC.setLocalDescription(new RTCSessionDescription(offer)); 
-    socket.emit('call', JSON.stringify({offer, from, to}))
-
-}
 audio.addEventListener('change', handleMedia, {});
 video.addEventListener('change', handleMedia, {});
 RTCPC.addEventListener('track', handleTrack, {});
@@ -87,7 +76,7 @@ async function getLocalMedia(){
     }else{
         v.src = window.URL.createObjectURL(stream);
     }
-    JSON.parse(localStorage.getItem('play')).player !== socket.id && stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
+    stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
 }
 // 确认邀请
 async function handleSure(to){
@@ -110,7 +99,7 @@ async function callSure({offer, from, to}){
     const answer = await RTCPC.createAnswer();
     await RTCPC.setLocalDescription(answer);
     socket.emit('response', JSON.stringify({answer, from, to}));
-}
+}   
 function callRefuse(){
     liveConfig.onLive = false;   
     const txt = '已拒绝邀请'

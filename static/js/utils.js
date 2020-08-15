@@ -133,9 +133,7 @@ function MsgBox(msg, src){
 function preloadSrc(){
     const resource = [ '../sound/ding.wav' , '../sound/msg.mp3', '../sound/play.wav' ,
     '../sound/switch.mp3' , '../sound/victory.mp3' ]
-    Promise.all(resource.map(src => playMusic(src, 'muted'))).then(res => {
-        console.log(res);
-    })
+    resource.forEach(src => playMusic(src, 'muted'));
 }
 preloadSrc();
 
