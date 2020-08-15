@@ -15,7 +15,7 @@ const handleMedia = function(){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        // getLocalMedia();
+        getLocalMedia();
         handleSure(to)
         return;
     }
@@ -48,7 +48,7 @@ socket.on('call', obj => {
 })
 socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
-    await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
+    // await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
     handleSure(to);
 })
 
