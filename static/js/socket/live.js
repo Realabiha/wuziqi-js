@@ -23,7 +23,7 @@ const handleMedia = function(){
 }
 const handleTrack = function(e){
     const {player: to} = JSON.parse(localStorage.getItem('play'));
-    if(to !== socket.id) return;
+    if(to === socket.id) return;
     const v = document.querySelector('.online');
     const stream = e.streams[0];
     v.style.width = '100%';
