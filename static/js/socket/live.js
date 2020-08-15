@@ -61,7 +61,7 @@ socket.on('call', obj => {
 socket.on('response', async obj => {
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
-    // handleSure(to);
+    handleSure(to);
 })
 
 async function getLocalMedia(){
