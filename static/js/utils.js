@@ -58,6 +58,7 @@ function playMusic(src){
     })
 }
 function resetGame(grids, gridrow, gridcolumn){
+    if(userConfig.AI) return location.reload();
     for(let i = 0; i < gridrow; i++){
         for(let j = 0; j < gridcolumn; j++){
             const node = grids[i][j];
@@ -73,7 +74,13 @@ function resetGame(grids, gridrow, gridcolumn){
 function initConfig(){
     const config = JSON.parse(localStorage.getItem('config'));
     if(config) userConfig = config;
-    userConfig.AI ? aiSwitch.classList.add('active') : aiSwitch.classList.remove('active'); 
+    if(userConfig.AI){
+        aiSwitch.classList.add('active');
+        chess.classList.remove('hide');
+    }else{
+        aiSwitch.classList.remove('active');
+    }
+    // userConfig.AI ? aiSwitch.classList.add('active') : aiSwitch.classList.remove('active'); 
     userConfig.online ? onlineSwitch.classList.add('active') : onlineSwitch.classList.remove('active');
     document.body.style.background = userConfig.bg;
     bgPicker.style.background = userConfig.bg;

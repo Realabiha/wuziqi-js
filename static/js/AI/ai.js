@@ -22,9 +22,9 @@ for (let i = 0; i < total; i++) {
 
 function wins(gridrow, gridcolumn) {
   rowWin(gridrow, gridcolumn),
-    columnWin(gridrow, gridcolumn),
-    topBottomWin(gridrow, gridcolumn),
-    bottomTopWin(gridrow, gridcolumn)
+  columnWin(gridrow, gridcolumn),
+  topBottomWin(gridrow, gridcolumn),
+  bottomTopWin(gridrow, gridcolumn)
 }
 function calcWin(grids, gridrow, gridcolumn) {
   for (let i = 0; i < gridrow; i++) {
