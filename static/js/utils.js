@@ -42,10 +42,9 @@ function directionCheck(i, j, gridrow, gridcolumn){
     }
     return DIR.row | DIR.column | DIR.bottomTop | DIR.topBottom;
 }
-function playMusic(src, muted){
+function playMusic(src){
     return new Promise((resolve, reject) => {
         const audio = new Audio(src);
-        muted && (audio.muted = muted);
         audio.oncanplay = function(){
             try {
                 this.play()
