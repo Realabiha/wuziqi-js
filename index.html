@@ -11,7 +11,7 @@
     <script src="./js/socket.js"></script>
 </head>
 <body>
-    <div class="switch">
+    <div class="switch hide">
         <div class="pbg"></div>
         <label for="AI" data-switch="AI">
             <input type="checkbox" id="AI" />
@@ -34,9 +34,9 @@
             <p>开启科学下棋，我是一个黑科技</p>
         </label>
     </div>
-    <div class="chess">
+    <div class="chess hide">
     </div>
-    <div class="users">
+    <div class="users hidden">
         <ul class="list">
             
         </ul>
@@ -44,16 +44,19 @@
     <div class="chat">
         <div class="content"></div>
         <form action="" method="">
-            <label for="audio" title="语音">
+            <!-- <label for="audio" title="语音">
                 <input type="checkbox" id="audio" />
-            </label>
-            <input type="text" id="msg" name="msg" placeholder="Enter发送消息"/>
+            </label> -->
+            <input type="text" id="msg" name="msg" placeholder="来和大家打个招呼吧(Enter发送消息)"/>
+            <!-- <label for="hangup" title="语音">
+                <input type="checkbox" id="hangup" />
+            </label> -->
             <label for="video" title="视频">
                 <input type="checkbox" id="video" />
             </label>
         </form>
     </div>
-    <div class="live">
+    <div class="live hide">
         <video class="online" autoplay></video>
         <video class="local" autoplay muted></video>
     </div>

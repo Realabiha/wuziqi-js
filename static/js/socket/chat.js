@@ -31,6 +31,7 @@ function createMsgDiv(msg, src){
     const pos = socket.id.substring(0, 4) == msg.split(':')[0] ? 'right' : 'left';
     const div = document.createElement('div');
     div.classList.add('input');
+    div.style.wordWrap = 'break-word';
     div.setAttribute('pos', pos);
     div.textContent = msg;
     src ? playMusic(src) : '';

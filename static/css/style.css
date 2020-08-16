@@ -15,7 +15,7 @@
     border: none!important;
 }
 *{
-    transition: all .3s ease-in-out;
+    transition: all .5s ease-in-out;
 }
 ul, li{
     list-style-type: none;
@@ -46,23 +46,23 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 120px;
     height: 100vh;
     z-index: 999;
     background:#000;
     box-shadow: 0px 0px 10px 0px #000;
     transition: all .5s ease-in-out;
 }
-.switch::after{
+/* .switch::after{
     position: absolute;
     top: 95%;
-    left: calc(50% - 5px);
+    left: calc(50% - 15px);
     content: '';
     width: 10px;
     height: 10%;
     border-radius: 10px;
     background: #fff;
-}
+} */
 .switch.hide{
     /* left: -100px; */
     bottom: 100vh;
@@ -127,9 +127,10 @@ body{
 
 /* chess */
 .chess{
+    /* display: block; */
     position: absolute;
     top: 50%;
-    left: 100px;
+    left: 103px;
     width: 1024px;
     height: 1024px;
     background-image: url('../img/bg3.jpg');
@@ -137,6 +138,10 @@ body{
     background-size: 100% 100%;
     transform: translateY(-50%);
     /* z-index: 1000; */
+}
+.chess.hide{
+    /* display: none; */
+    width: 0;
 }
 .light{
     position: absolute;
@@ -154,10 +159,20 @@ body{
     width: 120px;
     height: auto;
     max-height: calc(100vh - 74px);
-    padding: 30px 5px 0px 0px;
+    padding: 30px 0px 0px;
     color: #fff;
     box-sizing: border-box;
     overflow-y: scroll;
+    box-sizing: border-box;
+}
+.users.hide{
+    width: 0;
+}
+.users.hidden{
+    overflow: hidden;
+}
+.users .list{
+    margin: 0 auto;
 }
 .users .list h4{
     text-align: center;
@@ -165,11 +180,14 @@ body{
 }
 .users .list li{
     margin: 20px 0;
-    border: 1px solid #eee;
+    /* border: 1px solid #eee; */
     border-radius: 5px;
     padding: 5px 10px;
     box-sizing: border-box;
     text-align: center;
+    box-shadow:  inset 0px 0px 3px 3px #fff;
+    background: rgba(0, 0, 0, .8);
+
 }
 .users .list li.active{
     color: yellowgreen;
@@ -178,6 +196,8 @@ body{
 .users .list li:hover{
     color: #000;
     background: #fff;
+    box-shadow:  inset 0px 0px 3px 2px #000;
+    background: rgba(255, 255, 255, .8);
 }
 
 
@@ -195,14 +215,13 @@ body{
     background: rgba(0, 0, 0, .1);
     color: #fff;
     z-index: 1000;
-    overflow: hidden;
     font-size: 25px;
+    overflow: hidden;
     /* overflow-y: -moz-scrollbars-none; */
     /* -ms-overflow-style: none; */
 }
-
 .chat.hide{
-    right: -360px;
+    right: -700px;
 }
 .content{
     width: 100%;
@@ -217,6 +236,12 @@ body{
     flex-direction: column;
     margin: 10px 0;
     align-items: flex-start;
+    /* word-wrap: break-word; */
+    word-break: break-all;
+    width: 100%;
+    height: auto;
+    line-height: 30px;
+    letter-spacing: 3px;
 }
 .content .broadcast{
     text-align: center;
@@ -248,9 +273,11 @@ form label{
     background-image: url(../img/send.png);    
 }
 form label[for=audio]{
+    display: none;
     background-image: url(../img/audio.png);    
 }
 form label[for=video]{
+    display: none;
     background-image: url(../img/video.png);    
 }
 form > input{
@@ -272,6 +299,11 @@ form label input{
     bottom: 0;
     width: 700px;
     height: auto;
+}
+.live.hide .local,
+.live.hide .online
+{
+    width: 0;
 }
 .live .local{
     position: absolute;

@@ -1,5 +1,3 @@
-const audio = document.querySelector('label[for=audio]');
-const video = document.querySelector('label[for=video]');
 const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 const RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
 const RTCPC = new RTCPeerConnection();
@@ -12,17 +10,21 @@ const handleMedia = function(){
     liveConfig.video = !(val === 'audio'); 
     if(liveConfig.isCalling || liveConfig.onLive)
     return new MsgBox('邀请或聊天中', '../sound/msg.mp3');
-    const { to } = JSON.parse(localStorage.getItem('play'));
+    const sessionData = sessionStorage.getItem('play');
+    let { from, to } = sessionData && JSON.parse(sessionData);
+    to = to === socket.id ? from : to;
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        getLocalMedia();
+        getLocalMedia(socket);
         handleSure(to)
         return;
     }
     handleRefuse();
 }
 const handleTrack = function(e){
-    const { to } = JSON.parse(localStorage.getItem('play'));
+    const sessionData = sessionStorage.getItem('play');
+    let { from, to } = sessionData && JSON.parse(sessionData);
+    to = to === socket.id ? from : to;
     const v = document.querySelector('.online');
     const stream = e.streams[0];
     v.style.width = '100%';
@@ -33,7 +35,7 @@ const handleTrack = function(e){
     }
 }
 
-audio.addEventListener('change', handleMedia, {});
+// audio.addEventListener('change', handleMedia, {});
 video.addEventListener('change', handleMedia, {});
 RTCPC.addEventListener('track', handleTrack, {});
 
@@ -48,13 +50,15 @@ socket.on('call', obj => {
 })
 socket.on('response', async obj => {
     liveConfig.onLive = true;
+    live.classList.remove('hide');
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
+    video.style.display = 'none';
     handleSure(to);
 })
 socket.on('busy', msg => {})
 
-async function getLocalMedia(){
+async function getLocalMedia(id){
     const v = document.querySelector('.local');
     const {audio, video} = liveConfig;
     if(navigator.mediaDevices.getUserMedia === undefined){
@@ -96,11 +100,13 @@ function handleRefuse(){
 // 接受邀请
 async function callSure({offer, from, to}){
     !liveConfig.onLive && (liveConfig.onLive = true);
+    live.classList.remove('hide');
     getLocalMedia();
     await RTCPC.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await RTCPC.createAnswer();
     await RTCPC.setLocalDescription(answer);
     socket.emit('response', JSON.stringify({answer, from, to}));
+    video.style.display = 'none';
 }   
 function callRefuse(){
     liveConfig.onLive = false;   

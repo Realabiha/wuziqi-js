@@ -10,6 +10,12 @@ const skinPicker = document.querySelector('label[for=skin]');
 const showBg = document.querySelector('.pbg');
 const configBtn = document.querySelector('.config');
 
+const user = document.querySelector('.users');
+const list = document.querySelector('.list');
+const live = document.querySelector('.live');
+const audio = document.querySelector('label[for=audio]');
+const video = document.querySelector('label[for=video]');
+
 let grids = [], 
     count = 1, 
     result = false,  
@@ -39,17 +45,45 @@ initConfig();
 const handleSwitch = function(e){
     const { checked } = e.target;
     const { switch: type } = this.dataset;
-    let status = '';
+    let status = '', mode = '';
     userConfig[type] = checked;
     if(checked){
         status = '开启';
         this.classList.add('active');
+        if(type === 'AI'){
+            mode = '人机';
+            onlineSwitch.classList.remove('active');
+            userConfig.online = false;
+        }else{
+            mode = '在线';
+            aiSwitch.classList.remove('active');
+            userConfig.AI = false;
+        }
     }else{
         status = '关闭';
         this.classList.remove('active');
+        if(type === 'AI'){
+            mode = '人机';
+            onlineSwitch.classList.add('active');
+            userConfig.online = true;
+        }else{
+            mode = '在线';
+            aiSwitch.classList.add('active');
+            userConfig.AI = true;
+        }
     }
-    const txt = `人机对战${status}`;
+    const txt = `${mode}对战${status}`;
     localStorage.setItem('config', JSON.stringify(userConfig));
+    if(userConfig.AI){
+        chess.classList.remove('hide');
+        user.classList.remove('hidden');
+        user.classList.add('hide');
+    }else{
+        chess.classList.add('hide');
+        user.classList.add('hidden');
+        user.classList.remove('hide');
+    }
+    resetGame();         
     new MsgBox(txt, '../sound/switch.mp3');
 }
 const handlePick = function(e){
@@ -100,6 +134,10 @@ const handleResize = function(e){
     showBg.style.borderRadius = '10px';
 
 }
+const handleRefresh = function(){
+    sessionStorage.removeItem('play');
+    resetGame();
+}
 
 aiSwitch.addEventListener('change', handleSwitch, {});
 onlineSwitch.addEventListener('change', handleSwitch, {});
@@ -111,15 +149,15 @@ delegate('mouseout', switchWrap, '.switch label', handleMouseOut);
 switchWrap.addEventListener('mouseleave', handleMouseLeave, {})
 configBtn.addEventListener('mouseenter', handleMouseEnter, {});
 window.addEventListener('resize', handleResize, {});
+window.addEventListener('beforeunload', handleRefresh, {});
 
 const onlineCheck = function(x, y){
     if(userConfig.online){
-        const role = localStorage.getItem('role');
-        if(done || role === 'watcher') return;
+        const sessionData = sessionStorage.getItem('play');
+        if(done || !sessionData) return;
         done = true;
-        const { to } = JSON.parse(localStorage.getItem('play'))
-        console.log(to, 'to');
-        socket.emit('play', `${x}|${y}|${to}`);
+        const { from, to } = JSON.parse(sessionData);
+        socket.emit('play', `${x}|${y}|${to === socket.id ? from : to}`);
     }
     playChess.call(this, x, y, 0);
 }
@@ -141,7 +179,6 @@ const bindClick = function(){
     }
 }
 bindClick();
-
 
 const getResult = function(){
     result = checkResult(grids, GRIDROW, GRIDCOLUMN);

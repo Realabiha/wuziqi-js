@@ -39,14 +39,16 @@ IO.on('connection', socket => {
 
     // ganme
     socket.on('invite', msg => {
-        const temp = msg.split('|');
-        console.log(msg, 'invite');
-        socket.to(temp[1]).emit('invite', msg);
+        const { from, to } = JSON.parse(msg);
+        socket.to(to).emit('invite', msg);
     })
     socket.on('answer', msg => {
-        const temp = msg.split('|');
-        console.log(msg, 'answer');
-        socket.to(temp[1]).emit('answer', msg);
+        const { from, to, answer } = JSON.parse(msg);
+        socket.to(from).emit('answer', msg);
+    })
+    socket.on('busy', msg => {
+        const { from, to } = JSON.parse(msg);
+        socket.to(from).emit('busy', msg);
     })
     socket.on('play', msg => {
         const temp = msg.split('|');
@@ -56,9 +58,7 @@ IO.on('connection', socket => {
 
     // live
     socket.on('call', obj => {
-        // console.log(JSON.parse(obj));
         const {offer, from, to} = JSON.parse(obj);
-        console.log(to, 'to');
         socket.to(to).emit('call', obj);
     })
     // response
