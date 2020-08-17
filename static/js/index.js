@@ -16,6 +16,10 @@ const live = document.querySelector('.live');
 const audio = document.querySelector('label[for=audio]');
 const video = document.querySelector('label[for=video]');
 
+const canvas = document.querySelector('#ctx')
+const ctx = canvas.getContext('2d');
+const tools = document.querySelector('.tools'); 
+
 let grids = [], 
     count = 1, 
     result = false,  
@@ -77,13 +81,12 @@ const handleSwitch = function(e){
     if(userConfig.AI){
         chess.classList.remove('hide');
         user.classList.remove('hidden');
-        user.classList.add('hide');
+        // user.classList.add('hide');
     }else{
         chess.classList.add('hide');
         user.classList.add('hidden');
-        user.classList.remove('hide');
+        // user.classList.remove('hide');
     }
-    resetGame();         
     new MsgBox(txt, '../sound/switch.mp3');
 }
 const handlePick = function(e){

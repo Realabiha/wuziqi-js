@@ -49,8 +49,7 @@ body{
     width: 120px;
     height: 100vh;
     z-index: 999;
-    background:#000;
-    box-shadow: 0px 0px 10px 0px #000;
+    background: rgba(110, 110, 110, .8);
     transition: all .5s ease-in-out;
 }
 /* .switch::after{
@@ -94,6 +93,7 @@ body{
     background-repeat: no-repeat;
     margin: 10px 0;
     border-radius: 10px;
+    transition: box-shadow ease-in-out .3s;
 }
 .switch label[for=AI]::after,
 .switch label[for=online]::after{
@@ -102,6 +102,9 @@ body{
     height: 80px;
     background: rgba(0, 0, 0, .8);
     content: '';
+}
+.switch label.active{
+    box-shadow: inset 0 0 3px 3px #000;
 }
 .switch label.active::after{
     display: none;
@@ -140,8 +143,7 @@ body{
     /* z-index: 1000; */
 }
 .chess.hide{
-    /* display: none; */
-    width: 0;
+    left: -1200px;
 }
 .light{
     position: absolute;
@@ -164,6 +166,7 @@ body{
     box-sizing: border-box;
     overflow-y: scroll;
     box-sizing: border-box;
+    transition: width ease-in-out .3s;
 }
 .users.hide{
     width: 0;
@@ -230,7 +233,6 @@ body{
     box-sizing: border-box;
     overflow-y: scroll;
 }
-/* .content::-webkit-scrollbar { width: 0 !important } */
 .content .input{
     display: flex;
     flex-direction: column;
@@ -300,20 +302,48 @@ form label input{
     width: 700px;
     height: auto;
 }
-.live.hide .local,
-.live.hide .online
-{
-    width: 0;
+.live.hide{
+    right: -700px;
 }
-.live .local{
+/* .live.hide .local,
+.live.hide .online{
+    width: 0;
+} */
+.live .local,
+.live .tools,
+.live #ctx{
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 360px;
-    height: auto;
+    width: 350px;
+    height: 265px;
     background: #ccc;
     z-index: 1000;
+    background: transparent;
 }
+.live .local{
+    width: 0;
+}
+.tools img{
+    width: 50px;
+    height: 50px;
+}
+.live div.tools{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    left: 0
+}
+.live .tools span{
+    width: 50px;
+    height: 50px;
+    background-image: url('../img/set.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 .live .online{
     position: absolute;
     right: 0;
@@ -335,7 +365,7 @@ form label input{
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    animation: rotating 3s ease-in-out infinite reverse;
+    animation: rotating 3s ease-in-out infinite;
     background-image: url(../img/set.jpg);
 }
 .config:hover{

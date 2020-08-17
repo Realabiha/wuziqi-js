@@ -2,7 +2,7 @@
 let users = [];
 // 主动邀请
 const handleInvite = function(){
-    if(userConfig.AI || !userConfig.online) return new MsgBox('请开启线上模式关闭AI模式');
+    if(userConfig.AI || !userConfig.online) return new MsgBox('当前模式AI');
     if(playConfig.onPlay || playConfig.isInviting) return new MsgBox('邀请或游戏中', '../sound/msg.mp3');
     const { id: to } = this.dataset;
     const result = window.confirm(`是否邀请${to.substring(0, 4)}？`);

@@ -34,10 +34,26 @@ const handleTrack = function(e){
         v.src = window.URL.createObjectURL(stream);
     }
 }
+const handleBtn = function(e){
+        const link = document.createElement('a');
+        const base64img = canvas.toDataURL('image/png');
+        link.setAttribute('download', 'ctxtoimg');
+        link.style.width = '50px';
+        link.style.height = '50px';
+        link.href = base64img;
+        link.innerHTML = `<img src="${base64img}" />`
+        tools.appendChild(link);
+        playMusic('../sound/snap.mp3');
+}
+const handleImg = function(e){
+    
+}
 
 // audio.addEventListener('change', handleMedia, {});
 video.addEventListener('change', handleMedia, {});
 RTCPC.addEventListener('track', handleTrack, {});
+canvas.addEventListener('click', handleBtn, {});
+
 
 // 音视频被邀请
 socket.on('call', obj => {
@@ -76,12 +92,14 @@ async function getLocalMedia(id){
         })
     }
     const stream = await navigator.mediaDevices.getUserMedia({audio, video});
-    v.style.width = 360 + 'px';
+    v.style.width = 350 + 'px';
     if('srcObject' in v){
         v.srcObject = stream;
     }else{
         v.src = window.URL.createObjectURL(stream);
     }
+    // const {offsetWidth: x, offsetHeight: y} = v;
+    drawImage.call(v, 350, 265);
     stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
 }
 // 确认邀请
@@ -112,4 +130,9 @@ function callRefuse(){
     liveConfig.onLive = false;   
     const txt = '已拒绝邀请'
     new MsgBox(txt, '../sound/msg.mp3');
+}
+
+function drawImage(x, y){
+    ctx.drawImage(this, 0, 0, x, y);
+    requestAnimationFrame(drawImage.bind(this, x, y));
 }

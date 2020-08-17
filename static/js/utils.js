@@ -76,7 +76,7 @@ function initConfig(){
     if(config) userConfig = config;
     if(userConfig.AI){
         aiSwitch.classList.add('active');
-        chess.classList.remove('hide');
+        // chess.classList.remove('hide');
     }else{
         aiSwitch.classList.remove('active');
     }
@@ -138,11 +138,12 @@ function MsgBox(msg, src){
 
 function preloadSrc(){
     const resource = [ 
-        '../sound/ding.wav', 
         '../sound/msg.mp3', 
         '../sound/play.wav' ,
+        '../sound/ding.wav', 
         '../sound/switch.mp3' ,
-        '../sound/victory.mp3' 
+        '../sound/victory.mp3', 
+        '../sound/snap.mp3'
     ]
     resource.forEach(src => new Audio(src));
 }
