@@ -87,7 +87,7 @@ const handleSwitch = function(e){
         user.classList.add('hidden');
         // user.classList.remove('hide');
     }
-    new MsgBox(txt, '../sound/switch.mp3');
+    new MsgBox(txt, './sound/switch.mp3');
 }
 const handlePick = function(e){
     const type = this.dataset.switch;
@@ -96,7 +96,7 @@ const handlePick = function(e){
     type === 'bg' ? (document.body.style.background = color, this.style.background = color) : '';
     userConfig[type] = color;
     localStorage.setItem('config', JSON.stringify(userConfig));
-    new MsgBox(txt, '../sound/switch.mp3');
+    new MsgBox(txt, './sound/switch.mp3');
 }
 const handleHack = function(e){
     if(userConfig.AI) userConfig.hack = e.target.checked;
@@ -218,14 +218,14 @@ function playChess(x, y, socket = 1){
             aiWin[k] = -5;
         }
     }
-    playMusic('../sound/play.wav').finally(res => {
+    playMusic('./sound/play.wav').finally(res => {
         getResult();
     });
 }
 function gameOver(){
     result = checkResult(grids, GRIDROW, GRIDCOLUMN);
     if(result){
-        playMusic('../sound/victory.mp3').finally(res => {
+        playMusic('./sound/victory.mp3').finally(res => {
             const msg = `比赛结束: ${count % 2 == 1 ? '白棋' : '黑棋'}胜`
             setTimeout( _ => {
                 // location.reload();

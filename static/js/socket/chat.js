@@ -22,7 +22,7 @@ text.addEventListener('focus', handleFocus, {});
 content.addEventListener('scroll', handleScroll, {});
 
 
-socket.on('msg', msg => createMsgDiv(msg, '../sound/ding.wav'));
+socket.on('msg', msg => createMsgDiv(msg, './sound/ding.wav'));
 
 function scrollDown(){
     content.scrollTop = content.scrollHeight;

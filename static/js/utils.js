@@ -44,17 +44,17 @@ function directionCheck(i, j, gridrow, gridcolumn){
 }
 function playMusic(src){
     return new Promise((resolve, reject) => {
-        const audio = new Audio(src);
-        audio.oncanplay = function(){
-            try {
-                this.play()
-            } catch (error) {
-            }
-            resolve()
-        }
-        audio.onerror = function(){
+        const audios = document.querySelectorAll('audio');
+        const audio = [...audios].find(audio => 
+            audio.src.indexOf(src.substring(1)) > -1
+        )
+        if(audio){
+            audio.currentTime = 0;
+            audio.play();
+            resolve();
+        }else{
             reject();
-        } 
+        }
     })
 }
 function resetGame(grids, gridrow, gridcolumn){
@@ -138,12 +138,12 @@ function MsgBox(msg, src){
 
 function preloadSrc(){
     const resource = [ 
-        '../sound/msg.mp3', 
-        '../sound/play.wav' ,
-        '../sound/ding.wav', 
-        '../sound/switch.mp3' ,
-        '../sound/victory.mp3', 
-        '../sound/snap.mp3'
+        './sound/msg.mp3', 
+        './sound/play.wav' ,
+        './sound/ding.wav', 
+        './sound/switch.mp3' ,
+        './sound/victory.mp3', 
+        './sound/snap.mp3'
     ]
     resource.forEach(src => new Audio(src));
 }

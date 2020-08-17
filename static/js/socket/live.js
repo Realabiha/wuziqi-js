@@ -9,7 +9,7 @@ const handleMedia = function(){
     let val = this.getAttribute('for');
     liveConfig.video = !(val === 'audio'); 
     if(liveConfig.isCalling || liveConfig.onLive)
-    return new MsgBox('邀请或聊天中', '../sound/msg.mp3');
+    return new MsgBox('邀请或聊天中', './sound/msg.mp3');
     const sessionData = sessionStorage.getItem('play');
     let { from, to } = sessionData && JSON.parse(sessionData);
     to = to === socket.id ? from : to;
@@ -43,7 +43,7 @@ const handleBtn = function(e){
         link.href = base64img;
         link.innerHTML = `<img src="${base64img}" />`
         tools.appendChild(link);
-        playMusic('../sound/snap.mp3');
+        playMusic('./sound/snap.mp3');
 }
 const handleImg = function(e){
     
@@ -113,7 +113,7 @@ async function handleSure(to){
 function handleRefuse(){
     liveConfig.isCalling = false;
     const txt = '邀请已取消'; 
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
 }
 // 接受邀请
 async function callSure({offer, from, to}){
@@ -129,7 +129,7 @@ async function callSure({offer, from, to}){
 function callRefuse(){
     liveConfig.onLive = false;   
     const txt = '已拒绝邀请'
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
 }
 
 function drawImage(x, y){

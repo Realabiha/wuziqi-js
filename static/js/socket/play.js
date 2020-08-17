@@ -3,7 +3,7 @@ let users = [];
 // 主动邀请
 const handleInvite = function(){
     if(userConfig.AI || !userConfig.online) return new MsgBox('当前模式AI');
-    if(playConfig.onPlay || playConfig.isInviting) return new MsgBox('邀请或游戏中', '../sound/msg.mp3');
+    if(playConfig.onPlay || playConfig.isInviting) return new MsgBox('邀请或游戏中', './sound/msg.mp3');
     const { id: to } = this.dataset;
     const result = window.confirm(`是否邀请${to.substring(0, 4)}？`);
     result ? handleConfirm.call(this) : handleCancel.call(this);
@@ -39,14 +39,14 @@ socket.on('answer', msg => {
         // audio.style.display = 'inline-block';
         video.style.display = 'inline-block';
         sessionStorage.setItem('play', JSON.stringify(playConfig));
-        new MsgBox(`${to.substring(0, 4)}已接受`, '../sound/msg.mp3') 
+        new MsgBox(`${to.substring(0, 4)}已接受`, './sound/msg.mp3') 
         return;
     }
     playConfig.onPlay = false;
     playConfig.isInviting = false;
     playConfig.from = '';
     playConfig.to = '';
-    new MsgBox(`${to.substring(0, 4)}已拒绝`, '../sound/msg.mp3') 
+    new MsgBox(`${to.substring(0, 4)}已拒绝`, './sound/msg.mp3') 
 })
 // 对方邀请或游戏中
 socket.on('busy', msg => {
@@ -54,7 +54,7 @@ socket.on('busy', msg => {
     playConfig.onPlay = false;
     const { from, to } = JSON.parse(msg);
     const txt = `${to.substring(0, 4)}邀请或游戏中`
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
 })
 // 游戏线上模式对手落子
 socket.on('play', play => {
@@ -77,7 +77,7 @@ function handleConfirm(){
 function handleCancel(){
     playConfig.isInviting = false;
     const txt = '挑战已取消'; 
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
 }
 // 应答他人邀请
 function inviteConfirm({from, to}){
@@ -91,7 +91,7 @@ function inviteConfirm({from, to}){
     console.dir(video, 'video');
     sessionStorage.setItem('play', JSON.stringify(playConfig));
     const txt = '挑战已接受'; 
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
     socket.emit('answer', JSON.stringify({from, to, answer: 1}));
 }
 function inviteCancel(msg){
@@ -100,6 +100,6 @@ function inviteCancel(msg){
     playConfig.to = '';
     msg.answer = 0;
     const txt = '挑战已拒绝'; 
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
     socket.emit('answer', JSON.stringify(msg));
 }

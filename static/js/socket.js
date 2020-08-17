@@ -7,11 +7,11 @@ socket.on('connect', _ => {
 // listen and emit event
 socket.on('login', user => {
     const txt = `${user.substring(0, 4)}进入频道`;
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
 });
 socket.on('out', user => {
     const txt = `${user.substring(0, 4)}离开频道`;
-    new MsgBox(txt, '../sound/msg.mp3');
+    new MsgBox(txt, './sound/msg.mp3');
 })
 // 重连
 socket.on('reconnect', _ => {
