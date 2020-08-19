@@ -13,7 +13,7 @@ const handleMedia = function(e){
     to = to === socket.id ? from : to;
     if(liveConfig.isCalling || liveConfig.onLive){
         new MsgBox('你已挂断', './sound/msg.mp3');
-        getLocalMedia(false);
+        // getLocalMedia(false);
         liveConfig.isCalling = false;
         liveConfig.onLive = false;        
         live.classList.add('hide');
