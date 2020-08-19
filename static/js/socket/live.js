@@ -14,11 +14,12 @@ const handleMedia = function(e){
     if(liveConfig.isCalling || liveConfig.onLive){
         new MsgBox('你已挂断', './sound/msg.mp3');
         getLocalMedia(false);
+        liveConfig.isCalling = false;
+        liveConfig.onLive = false;        
+        live.classList.add('hide');
         setTimeout( _ => {
-            liveConfig.isCalling = false;
-            liveConfig.onLive = false;        
-            live.classList.add('hide');
-        }, 100)
+            RTCPC = new RTCPeerConnection();
+        })
         socket.emit('hangup', to);
         return RTCPC.close();
     }
@@ -84,11 +85,13 @@ socket.on('response', async obj => {
 })
 socket.on('hangup', msg => {
     new MsgBox('对方已挂断', './sound/msg.mp3');
+    liveConfig.isCalling = false;
+    liveConfig.onLive = false;        
+    live.classList.add('hide');
     setTimeout(_ => {
-        liveConfig.isCalling = false;
-        liveConfig.onLive = false;        
-        live.classList.add('hide');
+        RTCPC = new RTCPeerConnection();
     })
+
     console.log('对方已挂断')
 })
 
