@@ -6,8 +6,6 @@ let RTCPC = new RTCPeerConnection();
 // RTCPC = null
 
 const handleMedia = function(e){
-    console.log(11);
-    e.preventDefault();
     let val = this.getAttribute('for');
     liveConfig.video = !(val === 'audio'); 
     const sessionData = sessionStorage.getItem('play');
@@ -22,12 +20,11 @@ const handleMedia = function(e){
             live.classList.add('hide');
         }, 100)
         socket.emit('hangup', to);
-        return;
+        return RTCPC.close();
     }
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
-        liveConfig.isCalling = true;
-        getLocalMedia(socket);
+        getLocalMedia();
         handleSure(to)
         return;
     }
@@ -87,8 +84,11 @@ socket.on('response', async obj => {
 })
 socket.on('hangup', msg => {
     new MsgBox('对方已挂断', './sound/msg.mp3');
-    liveConfig.isCalling = false;
-    liveConfig.onLive = false;        
+    setTimeout(_ => {
+        liveConfig.isCalling = false;
+        liveConfig.onLive = false;        
+        live.classList.add('hide');
+    })
     console.log('对方已挂断')
 })
 
