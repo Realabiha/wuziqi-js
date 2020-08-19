@@ -12,6 +12,7 @@ delegate('click', list, '.list li', handleInvite);
 // 当前活动用户
 socket.on('users', data => {
     users = JSON.parse(data);
+    console.log('users', users);
     updateUserList(users);
 })
 // 游戏被邀请
@@ -90,6 +91,12 @@ function inviteConfirm({from, to}){
     video.style.display = 'inline-block';
     console.dir(video, 'video');
     sessionStorage.setItem('play', JSON.stringify(playConfig));
+    if(userConfig.AI){
+        userConfig.AI = false;
+        userConfig.online = true;
+        localStorage.setItem('config', JSON.stringify(userConfig));
+        initConfig();
+    }
     const txt = '挑战已接受'; 
     new MsgBox(txt, './sound/msg.mp3');
     socket.emit('answer', JSON.stringify({from, to, answer: 1}));

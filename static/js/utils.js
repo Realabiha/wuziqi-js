@@ -83,8 +83,6 @@ function initConfig(){
     // userConfig.AI ? aiSwitch.classList.add('active') : aiSwitch.classList.remove('active'); 
     userConfig.online ? onlineSwitch.classList.add('active') : onlineSwitch.classList.remove('active');
     document.body.style.background = userConfig.bg;
-    bgPicker.style.background = userConfig.bg;
-    skinPicker.style.background = userConfig.skin;
 }
 function delegate(type, parent, selector, cb){
     parent.addEventListener(type, e => {

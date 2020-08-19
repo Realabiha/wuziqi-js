@@ -14,6 +14,37 @@
     background-position: center;
     border: none!important;
 }
+.btn3d{
+    position: relative;
+    box-shadow: -5px 5px 0 0 #333;
+    border-radius: 0 !important;
+}
+.btn3d::before{
+    position: absolute;
+    left: -10px;
+    top: 0;
+    content: '';
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-right: 5px solid #333;
+    /* border-left-width: 0; */
+}
+.btn3d::after{
+    position: absolute;
+    right: 0;
+    top: calc(100% - 0px);
+    content: '';
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top: 5px solid #333;
+    /* border-left-width: 0; */
+}
+.btn3d:active{
+    left: -2.5px;
+    top: 2.5px;
+}
 *{
     transition: all .5s ease-in-out;
 }
@@ -49,7 +80,7 @@ body{
     width: 120px;
     height: 100vh;
     z-index: 999;
-    background: rgba(110, 110, 110, .8);
+    background: transparent;
     transition: all .5s ease-in-out;
 }
 /* .switch::after{
@@ -81,7 +112,12 @@ body{
     background-image: url('../img/online.jpg');
 }
 .switch label[for=skin],
+.switch label[for=bg]{
+    background: #fff;
+    cursor: not-allowed;
+}
 .switch label[for=hack]{
+    background: transparent;
     cursor: not-allowed;
 }
 .switch label{
@@ -102,6 +138,7 @@ body{
     height: 80px;
     background: rgba(0, 0, 0, .8);
     content: '';
+    border-radius: 10px;
 }
 .switch label.active{
     box-shadow: inset 0 0 3px 3px #000;
@@ -180,6 +217,7 @@ body{
 .users .list h4{
     text-align: center;
     color: yellowgreen;
+    text-shadow: 1px 1px 1px #000;
 }
 .users .list li{
     margin: 20px 0;
