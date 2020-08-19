@@ -1,20 +1,32 @@
 const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 const RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
-const RTCPC = new RTCPeerConnection();
+let RTCPC = new RTCPeerConnection();
 
 // RTCPC.sctp()
 // RTCPC = null
 
-const handleMedia = function(){
+const handleMedia = function(e){
+    console.log(11);
+    e.preventDefault();
     let val = this.getAttribute('for');
     liveConfig.video = !(val === 'audio'); 
-    if(liveConfig.isCalling || liveConfig.onLive)
-    return new MsgBox('邀请或聊天中', './sound/msg.mp3');
     const sessionData = sessionStorage.getItem('play');
     let { from, to } = sessionData && JSON.parse(sessionData);
     to = to === socket.id ? from : to;
+    if(liveConfig.isCalling || liveConfig.onLive){
+        new MsgBox('你已挂断', './sound/msg.mp3');
+        getLocalMedia(false);
+        setTimeout( _ => {
+            liveConfig.isCalling = false;
+            liveConfig.onLive = false;        
+            live.classList.add('hide');
+        }, 100)
+        socket.emit('hangup', to);
+        return;
+    }
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
+        liveConfig.isCalling = true;
         getLocalMedia(socket);
         handleSure(to)
         return;
@@ -57,6 +69,7 @@ canvas.addEventListener('click', handleBtn, {});
 
 // 音视频被邀请
 socket.on('call', obj => {
+    console.log('call');
     obj = JSON.parse(obj)
     if(!liveConfig.isCalling && !liveConfig.onLive){
         const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
@@ -69,12 +82,17 @@ socket.on('response', async obj => {
     live.classList.remove('hide');
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
-    video.style.display = 'none';
+    // video.style.display = 'none';
     handleSure(to);
 })
-socket.on('busy', msg => {})
+socket.on('hangup', msg => {
+    new MsgBox('对方已挂断', './sound/msg.mp3');
+    liveConfig.isCalling = false;
+    liveConfig.onLive = false;        
+    console.log('对方已挂断')
+})
 
-async function getLocalMedia(id){
+async function getLocalMedia(flag = true){
     const v = document.querySelector('.local');
     const {audio, video} = liveConfig;
     if(navigator.mediaDevices.getUserMedia === undefined){
@@ -98,9 +116,11 @@ async function getLocalMedia(id){
     }else{
         v.src = window.URL.createObjectURL(stream);
     }
-    // const {offsetWidth: x, offsetHeight: y} = v;
     drawImage.call(v, 350, 265);
-    stream.getTracks().forEach(track => RTCPC.addTrack(track, stream));
+    
+    stream.getTracks().forEach(track => {
+        flag ? RTCPC.addTrack(track, stream) : track.stop();
+    });
 }
 // 确认邀请
 async function handleSure(to){
@@ -124,14 +144,17 @@ async function callSure({offer, from, to}){
     const answer = await RTCPC.createAnswer();
     await RTCPC.setLocalDescription(answer);
     socket.emit('response', JSON.stringify({answer, from, to}));
-    video.style.display = 'none';
-}   
+    // video.style.display = 'none';
+}
+
+function hangUp(){
+
+}
 function callRefuse(){
     liveConfig.onLive = false;   
     const txt = '已拒绝邀请'
     new MsgBox(txt, './sound/msg.mp3');
 }
-
 function drawImage(x, y){
     ctx.drawImage(this, 0, 0, x, y);
     requestAnimationFrame(drawImage.bind(this, x, y));

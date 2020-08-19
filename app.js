@@ -67,6 +67,9 @@ IO.on('connection', socket => {
         console.log(to, 'to');
         socket.to(from).emit('response', obj);
     })
+    socket.on('hangup', to => {
+        socket.to(to).emit('hangup');
+    })
 
     // refresh or close fire disconnect
     socket.on('disconnect', function(){

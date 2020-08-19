@@ -137,7 +137,7 @@ function MsgBox(msg, src){
 function preloadSrc(){
     const resource = [ 
         './sound/msg.mp3', 
-        './sound/play.wav' ,
+        './sound/switch.mp3' ,
         './sound/ding.wav', 
         './sound/switch.mp3' ,
         './sound/victory.mp3', 
@@ -145,6 +145,4 @@ function preloadSrc(){
     ]
     resource.forEach(src => new Audio(src));
 }
-preloadSrc();
-
   

@@ -318,6 +318,7 @@ form label[for=audio]{
 }
 form label[for=video]{
     display: none;
+    width: 50px;
     background-image: url(../img/video.png);    
 }
 form > input{

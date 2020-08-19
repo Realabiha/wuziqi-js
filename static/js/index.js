@@ -218,7 +218,7 @@ function playChess(x, y, socket = 1){
             aiWin[k] = -5;
         }
     }
-    playMusic('./sound/play.wav').finally(res => {
+    playMusic('./sound/switch.mp3').finally(res => {
         getResult();
     });
 }
