@@ -11,19 +11,27 @@ const handleMedia = function(e){
         socket.emit('hangup', to);
         setTimeout(_ => {
             video.style.display = 'none';
+<<<<<<< HEAD
             live.classList.add('hide');
+=======
+>>>>>>> feature
             liveConfig.isCalling = false;
             liveConfig.onLive = false;        
+            live.classList.add('hide');
         })
         return RTCPC.close();
+        // 
+
+        // 
+        // 
     }
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
         getLocalMedia();
         handleSure(to)
-        return;
+    }else{
+        handleRefuse();
     }
-    handleRefuse();
 }
 const handleTrack = function(e){
     const sessionData = sessionStorage.getItem('play');
