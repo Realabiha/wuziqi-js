@@ -74,15 +74,7 @@ function resetGame(grids, gridrow, gridcolumn){
 function initConfig(){
     const config = JSON.parse(localStorage.getItem('config'));
     if(config) userConfig = config;
-    if(userConfig.AI){
-        aiSwitch.classList.add('active');
-        // chess.classList.remove('hide');
-    }else{
-        aiSwitch.classList.remove('active');
-    }
-    // userConfig.AI ? aiSwitch.classList.add('active') : aiSwitch.classList.remove('active'); 
-    userConfig.online ? onlineSwitch.classList.add('active') : onlineSwitch.classList.remove('active');
-    document.body.style.background = userConfig.bg;
+    document.body.style.background = bgPicker.style.background = userConfig.bg;
 }
 function delegate(type, parent, selector, cb){
     parent.addEventListener(type, e => {
@@ -102,6 +94,18 @@ function delegate(type, parent, selector, cb){
         }
     }, {})
 }
+function preloadSrc(){
+    const resource = [ 
+        './sound/msg.mp3', 
+        './sound/switch.mp3' ,
+        './sound/ding.wav', 
+        './sound/switch.mp3' ,
+        './sound/victory.mp3', 
+        './sound/snap.mp3'
+    ]
+    resource.forEach(src => new Audio(src));
+}
+
 function MsgBox(msg, src){
     const u = 0.6;
     const right = 300;
@@ -134,15 +138,7 @@ function MsgBox(msg, src){
     return span;
 }
 
-function preloadSrc(){
-    const resource = [ 
-        './sound/msg.mp3', 
-        './sound/switch.mp3' ,
-        './sound/ding.wav', 
-        './sound/switch.mp3' ,
-        './sound/victory.mp3', 
-        './sound/snap.mp3'
-    ]
-    resource.forEach(src => new Audio(src));
-}
+
+
+
   

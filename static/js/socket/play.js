@@ -66,11 +66,15 @@ function updateUserList(users){
     list.innerHTML =  users
     .filter(u => u !== socket.id)
     // .map(u => u.substring(0, 4))
-    .reduce((init, u) => init += `<li data-id=${u} title="点击邀请对战">${u.substring(0, 4)}</li>`, `<h4>在线${users.length}人</h4>`)
+    .reduce((init, u) => init += `
+            <li data-id=${u} title='用户${u.substring(0, 4)}' class='movebg'>
+                ${u.substring(0, 4)}
+            </li>`, `<h4>在线${users.length}人</h4>`)
 }
 // 主动邀请确认
 function handleConfirm(){
     playConfig.isInviting = true;
+    // this.checked = true;
     const { id: from } = socket;
     const { id: to } = this.dataset;
     socket.emit('invite', JSON.stringify({from, to}));

@@ -2,25 +2,20 @@ const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnectio
 const RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
 let RTCPC = new RTCPeerConnection();
 
-// RTCPC.sctp()
-// RTCPC = null
-
 const handleMedia = function(e){
-    let val = this.getAttribute('for');
-    liveConfig.video = !(val === 'audio'); 
     const sessionData = sessionStorage.getItem('play');
     let { from, to } = sessionData && JSON.parse(sessionData);
     to = to === socket.id ? from : to;
-    if(liveConfig.isCalling || liveConfig.onLive){
+    if(liveConfig.onLive){
         new MsgBox('你已挂断', './sound/msg.mp3');
         // getLocalMedia(false);
-        liveConfig.isCalling = false;
-        liveConfig.onLive = false;        
         live.classList.add('hide');
-        setTimeout( _ => {
-            RTCPC = new RTCPeerConnection();
-        })
+        video.style.display = 'none';
         socket.emit('hangup', to);
+        setTimeout(_ => {
+            liveConfig.isCalling = false;
+            liveConfig.onLive = false;        
+        })
         return RTCPC.close();
     }
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
@@ -55,9 +50,6 @@ const handleBtn = function(e){
         tools.appendChild(link);
         playMusic('./sound/snap.mp3');
 }
-const handleImg = function(e){
-    
-}
 
 // audio.addEventListener('change', handleMedia, {});
 video.addEventListener('change', handleMedia, {});
@@ -73,25 +65,25 @@ socket.on('call', obj => {
         const result = window.confirm(`${obj.from.substring(0, 4)}正在邀请你聊天？`)
         result ? callSure(obj) : callRefuse(obj);
     }
-    callSure(obj);
+    if(liveConfig.onLive){
+        callSure(obj);
+    }
 })
 socket.on('response', async obj => {
     liveConfig.onLive = true;
     live.classList.remove('hide');
     const {answer, from, to} = JSON.parse(obj);
     await RTCPC.setRemoteDescription(new RTCSessionDescription(answer));
-    // video.style.display = 'none';
     handleSure(to);
 })
 socket.on('hangup', msg => {
     new MsgBox('对方已挂断', './sound/msg.mp3');
-    liveConfig.isCalling = false;
-    liveConfig.onLive = false;        
     live.classList.add('hide');
+    video.style.display = 'none';
     setTimeout(_ => {
-        RTCPC = new RTCPeerConnection();
+        liveConfig.isCalling = false;
+        liveConfig.onLive = false;        
     })
-
     console.log('对方已挂断')
 })
 
@@ -148,10 +140,6 @@ async function callSure({offer, from, to}){
     await RTCPC.setLocalDescription(answer);
     socket.emit('response', JSON.stringify({answer, from, to}));
     // video.style.display = 'none';
-}
-
-function hangUp(){
-
 }
 function callRefuse(){
     liveConfig.onLive = false;   
