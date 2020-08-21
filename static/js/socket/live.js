@@ -8,13 +8,12 @@ const handleMedia = function(e){
     to = to === socket.id ? from : to;
     if(liveConfig.onLive){
         new MsgBox('你已挂断', './sound/msg.mp3');
-        // getLocalMedia(false);
-        live.classList.add('hide');
-        video.style.display = 'none';
         socket.emit('hangup', to);
         setTimeout(_ => {
+            video.style.display = 'none';
             liveConfig.isCalling = false;
             liveConfig.onLive = false;        
+            live.classList.add('hide');
         })
         return RTCPC.close();
     }
@@ -22,9 +21,9 @@ const handleMedia = function(e){
     if(result){
         getLocalMedia();
         handleSure(to)
-        return;
+    }else{
+        handleRefuse();
     }
-    handleRefuse();
 }
 const handleTrack = function(e){
     const sessionData = sessionStorage.getItem('play');
@@ -78,9 +77,9 @@ socket.on('response', async obj => {
 })
 socket.on('hangup', msg => {
     new MsgBox('对方已挂断', './sound/msg.mp3');
-    live.classList.add('hide');
-    video.style.display = 'none';
     setTimeout(_ => {
+        live.classList.add('hide');
+        video.style.display = 'none';
         liveConfig.isCalling = false;
         liveConfig.onLive = false;        
     })
