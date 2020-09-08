@@ -43,17 +43,23 @@ function directionCheck(i, j, gridrow, gridcolumn){
     return DIR.row | DIR.column | DIR.bottomTop | DIR.topBottom;
 }
 function playMusic(src){
+    // console.log(src);
     return new Promise((resolve, reject) => {
         const audios = document.querySelectorAll('audio');
-        const audio = [...audios].find(audio => 
-            audio.src.indexOf(src.substring(1)) > -1
-        )
-        if(audio){
-            audio.currentTime = 0;
-            audio.play();
-            resolve();
-        }else{
-            reject();
+        try {
+            const audio = [...audios].find(audio => {
+                audio.src.indexOf(src.substring(1)) > -1
+                // console.log(audio.src);   
+            })
+            if(audio){
+                audio.currentTime = 0;
+                audio.play();
+                resolve();
+            }else{
+                reject();
+            }
+        } catch (error) {
+            reject();            
         }
     })
 }

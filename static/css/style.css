@@ -124,11 +124,11 @@ body{
 }
 .switch label[for=skin]{
     background: linear-gradient(to top right, rgb(0,0,0), rgb(255,255,255));
-    transition: all ease 0s;
+    transition: all linear 0s;
 }
 .switch label[for=bg]{
     background: radial-gradient(hsl(0, 100%, 100%), hsl(360, 0%, 0%));
-    transition: all ease 0s;
+    transition: all linear 0s;
 }
 .switch label[for=hack]{
     background: transparent;
@@ -238,7 +238,7 @@ body{
     font-weight: bold;
     color: #000;
     text-align: center;
-    animation: bgmove 1s ease infinite;
+    animation: bgmove 1s linear infinite;
 }
 
 
@@ -404,7 +404,7 @@ form label input{
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    animation: rotating 1s ease infinite;
+    animation: rotating 1s linear infinite;
     background-image: url(../img/set.jpg);
 }
 .config:hover{

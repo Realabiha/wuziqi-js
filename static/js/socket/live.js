@@ -16,10 +16,6 @@ const handleMedia = function(e){
             live.classList.add('hide');
         })
         return RTCPC.close();
-        // 
-
-        // 
-        // 
     }
     const result = window.confirm(`是否邀请${to.substring(0, 4)}聊天？`);
     if(result){
